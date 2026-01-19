@@ -59,12 +59,12 @@ public partial class App : Application
             var commandLineArgs = Environment.GetCommandLineArgs();
             if (commandLineArgs.Contains("--autostart"))
             {
-                MinimizeWindow();
+                HideWindow();
             }
         }
     }
     
-    private void MinimizeWindow()
+    public void HideWindow()
     {
         MainWindow?.DispatcherQueue.TryEnqueue(() => 
         {
@@ -74,14 +74,42 @@ public partial class App : Application
                 var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
                 var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
                 
-                if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
-                {
-                    presenter.Minimize();
-                }
+                appWindow.Hide();
             }
             catch (Exception ex)
             {
-                System.Diagnostics.Debug.WriteLine($"Failed to minimize: {ex.Message}");
+                System.Diagnostics.Debug.WriteLine($"Failed to hide: {ex.Message}");
+            }
+        });
+    }
+
+    public void ShowWindow()
+    {
+        MainWindow?.DispatcherQueue.TryEnqueue(() => 
+        {
+            try
+            {
+                var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
+                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+                var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+                
+                appWindow.Show();
+                
+                // Also restore if minimized
+                if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
+                {
+                    if (presenter.State == Microsoft.UI.Windowing.OverlappedPresenterState.Minimized)
+                    {
+                        presenter.Restore();
+                    }
+                }
+                
+                // Bring to front
+                MainWindow.Activate();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to show: {ex.Message}");
             }
         });
     }

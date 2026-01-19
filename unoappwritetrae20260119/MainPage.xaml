@@ -4,9 +4,15 @@
       xmlns:local="using:unoappwritetrae20260119"
       xmlns:models="using:unoappwritetrae20260119.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:tb="using:H.NotifyIcon"
       Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid utu:SafeArea.Insets="VisibleBounds">
+    <Grid x:Name="RootGrid" utu:SafeArea.Insets="VisibleBounds">
+        <!--<tb:TaskbarIcon x:Name="TrayIcon"
+                        ToolTipText="UnoAppwriteTrae"
+                        IconSource="ms-appx:///icon.ico"
+                        LeftClickCommand="{x:Bind RestoreCommand}" />-->
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>

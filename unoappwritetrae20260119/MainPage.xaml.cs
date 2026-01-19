@@ -1,5 +1,7 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
+using CommunityToolkit.Mvvm.Input;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using unoappwritetrae20260119.Models;
@@ -15,6 +17,8 @@ public sealed partial class MainPage : Page
 
     public ObservableCollection<Subscription> Subscriptions { get; } = new ObservableCollection<Subscription>();
 
+    public ICommand RestoreCommand => new RelayCommand(RestoreWindow);
+
     public static readonly DependencyProperty IsLoadingProperty =
         DependencyProperty.Register(nameof(IsLoading), typeof(bool), typeof(MainPage), new PropertyMetadata(false));
 
@@ -27,6 +31,16 @@ public sealed partial class MainPage : Page
     public MainPage()
     {
         this.InitializeComponent();
+        
+        // Initialize Tray Icon
+        var trayIcon = new H.NotifyIcon.TaskbarIcon
+        {
+            ToolTipText = "UnoAppwriteTrae",
+            IconSource = new Microsoft.UI.Xaml.Media.Imaging.BitmapImage(new Uri("ms-appx:///icon.ico")),
+            LeftClickCommand = RestoreCommand
+        };
+        RootGrid.Children.Add(trayIcon);
+
         _appwriteService = new AppwriteService();
         _startupService = new StartupService();
         _notificationService = new NotificationService();
@@ -38,6 +52,14 @@ public sealed partial class MainPage : Page
         }
 
         Loaded += MainPage_Loaded;
+    }
+
+    private void RestoreWindow()
+    {
+        if (Application.Current is App app)
+        {
+            app.ShowWindow();
+        }
     }
 
     private async void MainPage_Loaded(object sender, RoutedEventArgs e)

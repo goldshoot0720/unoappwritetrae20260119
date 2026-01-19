@@ -32,6 +32,7 @@
     <PackageReference Include="Appwrite" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" />
     <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="H.NotifyIcon.WinUI" />
   </ItemGroup>
 
 </Project>
