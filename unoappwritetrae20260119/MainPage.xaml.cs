@@ -30,6 +30,13 @@ public sealed partial class MainPage : Page
         _appwriteService = new AppwriteService();
         _startupService = new StartupService();
         _notificationService = new NotificationService();
+        
+        // Start daily scheduler for notifications (6:00 AM)
+        if (System.OperatingSystem.IsWindows())
+        {
+             _notificationService.StartDailyScheduler(_appwriteService);
+        }
+
         Loaded += MainPage_Loaded;
     }
 
@@ -53,9 +60,6 @@ public sealed partial class MainPage : Page
                 // Force update to ensure --autostart argument is present
                 _startupService.SetStartup(true);
             }
-            
-            // Start daily scheduler for notifications (6:00 AM)
-            _notificationService.StartDailyScheduler(_appwriteService);
         }
         else
         {

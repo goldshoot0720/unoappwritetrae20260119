@@ -54,36 +54,36 @@ public partial class App : Application
         MainWindow.Activate();
         
         // Handle autostart argument
-        CheckForAutostart();
+        if (OperatingSystem.IsWindows())
+        {
+            var commandLineArgs = Environment.GetCommandLineArgs();
+            if (commandLineArgs.Contains("--autostart"))
+            {
+                MinimizeWindow();
+            }
+        }
     }
     
-    private void CheckForAutostart()
+    private void MinimizeWindow()
     {
-        if (!OperatingSystem.IsWindows()) return;
-
-        var commandLineArgs = Environment.GetCommandLineArgs();
-        if (commandLineArgs.Contains("--autostart"))
+        MainWindow?.DispatcherQueue.TryEnqueue(() => 
         {
-            // Minimize window using WinUI 3 APIs
-            MainWindow?.DispatcherQueue.TryEnqueue(() => 
+            try
             {
-                try
+                var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
+                var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+                var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+                
+                if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
                 {
-                    var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
-                    var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
-                    var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
-                    
-                    if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
-                    {
-                        presenter.Minimize();
-                    }
+                    presenter.Minimize();
                 }
-                catch (Exception ex)
-                {
-                    System.Diagnostics.Debug.WriteLine($"Failed to minimize: {ex.Message}");
-                }
-            });
-        }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Failed to minimize: {ex.Message}");
+            }
+        });
     }
 
     /// <summary>
