@@ -2,6 +2,7 @@ using System;
 using unoappwritetrae20260119.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Microsoft.Toolkit.Uwp.Notifications;
 
 namespace unoappwritetrae20260119.Services
 {
@@ -45,32 +46,10 @@ namespace unoappwritetrae20260119.Services
 
             try
             {
-                // Use PowerShell to show notification since we don't have direct WinRT access in net9.0-desktop (Uno default) easily
-                string script = $@"
-$xml = @""
-<toast>
-  <visual>
-    <binding template='ToastGeneric'>
-      <text>{title}</text>
-      <text>{text}</text>
-    </binding>
-  </visual>
-</toast>
-""@
-$xmlDocument = [Windows.Data.Xml.Dom.XmlDocument, Windows.Data.Xml.Dom.XmlDocument, ContentType=WindowsRuntime]::new()
-$xmlDocument.LoadXml($xml)
-$toast = [Windows.UI.Notifications.ToastNotification, Windows.UI.Notifications, ContentType=WindowsRuntime]::new($xmlDocument)
-[Windows.UI.Notifications.ToastNotificationManager, Windows.UI.Notifications, ContentType=WindowsRuntime]::CreateToastNotifier('UnoAppwriteTrae').Show($toast)
-";
-                
-                var psCommand = System.Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(script));
-                Process.Start(new ProcessStartInfo
-                {
-                    FileName = "powershell",
-                    Arguments = $"-NoProfile -ExecutionPolicy Bypass -EncodedCommand {psCommand}",
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                });
+                new ToastContentBuilder()
+                    .AddText(title)
+                    .AddText(text)
+                    .Show();
             }
             catch (Exception ex)
             {
