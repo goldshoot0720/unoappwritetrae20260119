@@ -8,15 +8,8 @@
     }
   },
   "profiles": {
-    "unoappwritetrae20260119 (Desktop)": {
-      "commandName": "Project",
-      "compatibleTargetFramework": "desktop"
-    },
-    "unoappwritetrae20260119 (Desktop WSL2)": {
-      "commandName": "WSL2",
-      "commandLineArgs": "{ProjectDir}/bin/Debug/net9.0-desktop/unoappwritetrae20260119.dll",
-      "distributionName": "",
-      "compatibleTargetFramework": "desktop"
+    "unoappwritetrae20260119 (Windows)": {
+      "commandName": "Project"
     }
   }
 }
