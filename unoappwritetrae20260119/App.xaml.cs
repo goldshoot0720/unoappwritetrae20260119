@@ -9,10 +9,6 @@ namespace unoappwritetrae20260119;
 
 public partial class App : Application
 {
-    [DllImport("user32.dll")]
-    static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-    private const int SW_MINIMIZE = 6;
-
     /// <summary>
     /// Initializes the singleton application object. This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -68,14 +64,23 @@ public partial class App : Application
         var commandLineArgs = Environment.GetCommandLineArgs();
         if (commandLineArgs.Contains("--autostart"))
         {
-            // Try to minimize after a short delay to allow window creation
-            MainWindow?.DispatcherQueue.TryEnqueue(async () => 
+            // Minimize window using WinUI 3 APIs
+            MainWindow?.DispatcherQueue.TryEnqueue(() => 
             {
-                await System.Threading.Tasks.Task.Delay(500); // Wait for window to be fully visible/created
-                var hwnd = Process.GetCurrentProcess().MainWindowHandle;
-                if (hwnd != IntPtr.Zero)
+                try
                 {
-                    ShowWindow(hwnd, SW_MINIMIZE);
+                    var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
+                    var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
+                    var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
+                    
+                    if (appWindow.Presenter is Microsoft.UI.Windowing.OverlappedPresenter presenter)
+                    {
+                        presenter.Minimize();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Failed to minimize: {ex.Message}");
                 }
             });
         }

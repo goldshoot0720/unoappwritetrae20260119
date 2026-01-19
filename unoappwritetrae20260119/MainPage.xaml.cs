@@ -53,6 +53,9 @@ public sealed partial class MainPage : Page
                 // Force update to ensure --autostart argument is present
                 _startupService.SetStartup(true);
             }
+            
+            // Start daily scheduler for notifications (6:00 AM)
+            _notificationService.StartDailyScheduler(_appwriteService);
         }
         else
         {
