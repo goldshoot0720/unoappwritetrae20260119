@@ -15,7 +15,7 @@ public sealed partial class MainPage : Page
     private AppwriteService _appwriteService;
     private StartupService _startupService;
     private NotificationService _notificationService;
-    private bool _sortByName = false;
+    private bool _sortByName = true;
 
     public ObservableCollection<Subscription> Subscriptions { get; } = new ObservableCollection<Subscription>();
 

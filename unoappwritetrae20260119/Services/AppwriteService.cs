@@ -32,38 +32,55 @@ namespace unoappwritetrae20260119.Services
 
         public async Task<List<Subscription>> GetSubscriptionsAsync()
         {
+            var subscriptions = new List<Subscription>();
+            int offset = 0;
+            const int pageSize = 100;
+
             try
             {
-                var response = await _databases.ListDocuments(
-                    databaseId: DatabaseId,
-                    collectionId: CollectionId,
-                    queries: new List<string> { Query.Limit(100) }
-                );
-
-                var subscriptions = new List<Subscription>();
-                foreach (var doc in response.Documents)
+                while (true)
                 {
-                    // Convert the Data dictionary to JSON and then back to Subscription
-                    // This handles the custom fields
-                    var json = JsonConvert.SerializeObject(doc.Data);
-                    var sub = JsonConvert.DeserializeObject<Subscription>(json);
-                    
-                    if (sub != null)
+                    var response = await _databases.ListDocuments(
+                        databaseId: DatabaseId,
+                        collectionId: CollectionId,
+                        queries: new List<string>
+                        {
+                            Query.Limit(pageSize),
+                            Query.Offset(offset)
+                        }
+                    );
+
+                    if (response.Documents == null || response.Documents.Count == 0)
+                        break;
+
+                    foreach (var doc in response.Documents)
                     {
-                        // Map system fields
-                        sub.Id = doc.Id;
-                        sub.CreatedAt = doc.CreatedAt;
-                        sub.UpdatedAt = doc.UpdatedAt;
-                        
-                        subscriptions.Add(sub);
+                        var json = JsonConvert.SerializeObject(doc.Data);
+                        var sub = JsonConvert.DeserializeObject<Subscription>(json);
+
+                        if (sub != null)
+                        {
+                            sub.Id = doc.Id;
+                            sub.CreatedAt = doc.CreatedAt;
+                            sub.UpdatedAt = doc.UpdatedAt;
+                            subscriptions.Add(sub);
+                        }
                     }
+
+                    // If we got fewer than pageSize, we've reached the end
+                    if (response.Documents.Count < pageSize)
+                        break;
+
+                    offset += pageSize;
                 }
+
+                System.Diagnostics.Debug.WriteLine($"Fetched {subscriptions.Count} subscriptions total");
                 return subscriptions;
             }
             catch (System.Exception ex)
             {
                 System.Diagnostics.Debug.WriteLine($"Error fetching subscriptions: {ex.Message}");
-                return new List<Subscription>();
+                return subscriptions; // Return whatever we fetched so far
             }
         }
     }
