@@ -29,6 +29,7 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                 <Button Content="測試通知" Click="TestNotification_Click" VerticalAlignment="Center"/>
                 <ToggleSwitch x:Name="StartupSwitch" Header="開機啟動" OffContent="關閉" OnContent="開啟" Toggled="StartupSwitch_Toggled" Margin="0,0,10,0"/>
+                <Button Content="按名稱排序" x:Name="SortByNameButton" Click="SortByNameButton_Click" VerticalAlignment="Center"/>
                 <Button Content="Refresh" Click="RefreshButton_Click" VerticalAlignment="Center"/>
             </StackPanel>
         </Grid>

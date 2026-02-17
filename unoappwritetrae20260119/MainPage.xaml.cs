@@ -15,6 +15,7 @@ public sealed partial class MainPage : Page
     private AppwriteService _appwriteService;
     private StartupService _startupService;
     private NotificationService _notificationService;
+    private bool _sortByName = false;
 
     public ObservableCollection<Subscription> Subscriptions { get; } = new ObservableCollection<Subscription>();
 
@@ -128,6 +129,13 @@ public sealed partial class MainPage : Page
         await LoadSubscriptionsAsync();
     }
 
+    private async void SortByNameButton_Click(object sender, RoutedEventArgs e)
+    {
+        _sortByName = !_sortByName;
+        SortByNameButton.Content = _sortByName ? "按日期排序" : "按名稱排序";
+        await LoadSubscriptionsAsync();
+    }
+
     private void TestNotification_Click(object sender, RoutedEventArgs e)
     {
         if (System.OperatingSystem.IsWindows())
@@ -153,15 +161,23 @@ public sealed partial class MainPage : Page
         {
             var items = await _appwriteService.GetSubscriptionsAsync();
             
-            // Sort items by NextDate ascending (nearest first)
-            var sortedItems = items.OrderBy(x => 
+            // Sort items based on current sort mode
+            IEnumerable<Subscription> sortedItems;
+            if (_sortByName)
             {
-                if (DateTime.TryParse(x.NextDate, out DateTime date))
+                sortedItems = items.OrderBy(x => x.Name ?? string.Empty, StringComparer.CurrentCultureIgnoreCase);
+            }
+            else
+            {
+                sortedItems = items.OrderBy(x => 
                 {
-                    return date;
-                }
-                return DateTime.MaxValue; // Put invalid/null dates at the end
-            });
+                    if (DateTime.TryParse(x.NextDate, out DateTime date))
+                    {
+                        return date;
+                    }
+                    return DateTime.MaxValue;
+                });
+            }
 
             foreach (var item in sortedItems)
             {
