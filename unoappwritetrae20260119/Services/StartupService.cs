@@ -140,5 +140,42 @@ namespace unoappwritetrae20260119.Services
             {
             }
         }
+
+        /// <summary>
+        /// Kills all other instances of the current application (same process name, different PID).
+        /// Call this early in Program.Main to ensure single-instance behavior.
+        /// </summary>
+        public static void KillOtherInstances()
+        {
+            try
+            {
+                var currentPid = Environment.ProcessId;
+                var currentProcessName = Process.GetCurrentProcess().ProcessName;
+                
+                var processes = Process.GetProcessesByName(currentProcessName);
+                foreach (var proc in processes)
+                {
+                    try
+                    {
+                        if (proc.Id != currentPid)
+                        {
+                            proc.Kill();
+                            System.Diagnostics.Debug.WriteLine($"Killed other instance: {currentProcessName} (PID {proc.Id})");
+                        }
+                    }
+                    catch
+                    {
+                    }
+                    finally
+                    {
+                        proc.Dispose();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"KillOtherInstances error: {ex.Message}");
+            }
+        }
     }
 }

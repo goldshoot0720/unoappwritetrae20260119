@@ -161,6 +161,8 @@ public sealed partial class MainPage : Page
         {
             var items = await _appwriteService.GetSubscriptionsAsync();
             
+            System.Diagnostics.Debug.WriteLine($"LoadSubscriptionsAsync: Got {items.Count} items");
+
             // Sort items based on current sort mode
             IEnumerable<Subscription> sortedItems;
             if (_sortByName)
@@ -186,6 +188,13 @@ public sealed partial class MainPage : Page
             
             // Check for expiring subscriptions (both toast + in-window)
             _notificationService.CheckAndNotify(items);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"LoadSubscriptionsAsync ERROR: {ex}");
+            // Show error in notification panel
+            NotificationList.ItemsSource = new List<string> { $"載入失敗: {ex.Message}" };
+            NotificationPanel.Visibility = Visibility.Visible;
         }
         finally
         {
