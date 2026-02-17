@@ -69,7 +69,7 @@
         </Border>
 
         <!-- Content -->
-        <ListView Grid.Row="2" ItemsSource="{x:Bind Subscriptions}" SelectionMode="None" Padding="10">
+        <ListView Grid.Row="2" ItemsSource="{x:Bind Subscriptions, Mode=OneWay}" SelectionMode="None" Padding="10">
             <ListView.ItemContainerStyle>
                 <Style TargetType="ListViewItem">
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
