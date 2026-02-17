@@ -1,0 +1,107 @@
+<Page x:Class="unoappwritetrae20260119.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:local="using:unoappwritetrae20260119"
+      xmlns:models="using:unoappwritetrae20260119.Models"
+      xmlns:utu="using:Uno.Toolkit.UI"
+      xmlns:tb="using:H.NotifyIcon"
+      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid x:Name="RootGrid" utu:SafeArea.Insets="VisibleBounds">
+        <!--<tb:TaskbarIcon x:Name="TrayIcon"
+                        ToolTipText="UnoAppwriteTrae"
+                        IconSource="ms-appx:///icon.ico"
+                        LeftClickCommand="{x:Bind RestoreCommand}" />-->
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Grid Grid.Row="0" Padding="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Subscriptions" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
+                <Button Content="測試通知" Click="TestNotification_Click" VerticalAlignment="Center"/>
+                <ToggleSwitch x:Name="StartupSwitch" Header="開機啟動" OffContent="關閉" OnContent="開啟" Toggled="StartupSwitch_Toggled" Margin="0,0,10,0"/>
+                <Button Content="Refresh" Click="RefreshButton_Click" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- In-Window Notification Banner -->
+        <Border x:Name="NotificationPanel" Grid.Row="1" 
+                Background="#FFF3CD" BorderBrush="#FFEEBA" BorderThickness="0,0,0,1"
+                Padding="16,12" Visibility="Collapsed">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Warning Icon -->
+                <TextBlock Grid.Column="0" Text="🔔" FontSize="20" VerticalAlignment="Top" Margin="0,2,12,0"/>
+                
+                <!-- Notification Messages -->
+                <StackPanel Grid.Column="1">
+                    <TextBlock Text="訂閱到期提醒" FontWeight="Bold" FontSize="14" Foreground="#856404" Margin="0,0,0,6"/>
+                    <ItemsControl x:Name="NotificationList">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <TextBlock Text="{x:Bind}" Foreground="#856404" FontSize="13" TextWrapping="Wrap" Margin="0,2"/>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+                
+                <!-- Dismiss Button -->
+                <Button Grid.Column="2" Content="✕" Click="DismissNotification_Click"
+                        Background="Transparent" BorderThickness="0" 
+                        Foreground="#856404" FontSize="16"
+                        VerticalAlignment="Top" Padding="8,4"/>
+            </Grid>
+        </Border>
+
+        <!-- Content -->
+        <ListView Grid.Row="2" ItemsSource="{x:Bind Subscriptions}" SelectionMode="None" Padding="10">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="models:Subscription">
+                    <Grid Margin="0,5" Padding="15" CornerRadius="12" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" Spacing="4">
+                            <TextBlock Text="{x:Bind Name}" FontSize="18" FontWeight="SemiBold"/>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="{x:Bind Site}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
+                                <TextBlock Text="|" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
+                                <TextBlock Text="{x:Bind Account}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
+                            </StackPanel>
+                            <TextBlock Text="{x:Bind NextDate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12" Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+                            <TextBlock Text="{x:Bind Price}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" HorizontalAlignment="Right"/>
+                            <TextBlock Text="per month" FontSize="10" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Right"/>
+                        </StackPanel>
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!-- Loading Indicator -->
+        <ProgressRing Grid.Row="2" IsActive="{x:Bind IsLoading, Mode=OneWay}" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Page>
