@@ -185,6 +185,8 @@ public sealed partial class MainPage : Page
             {
                 Subscriptions.Add(item);
             }
+
+            SubscriptionCountText.Text = $"共 {Subscriptions.Count} 筆";
             
             // Check for expiring subscriptions (both toast + in-window)
             _notificationService.CheckAndNotify(items);
@@ -192,6 +194,7 @@ public sealed partial class MainPage : Page
         catch (Exception ex)
         {
             System.Diagnostics.Debug.WriteLine($"LoadSubscriptionsAsync ERROR: {ex}");
+            SubscriptionCountText.Text = "共 0 筆";
             // Show error in notification panel
             NotificationList.ItemsSource = new List<string> { $"載入失敗: {ex.Message}" };
             NotificationPanel.Visibility = Visibility.Visible;

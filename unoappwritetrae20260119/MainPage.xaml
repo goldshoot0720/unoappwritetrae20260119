@@ -25,7 +25,10 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="Subscriptions" FontSize="28" FontWeight="Bold" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
+                <TextBlock Text="Subscriptions" FontSize="28" FontWeight="Bold"/>
+                <TextBlock x:Name="SubscriptionCountText" FontSize="16" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
+            </StackPanel>
             <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
                 <Button Content="測試通知" Click="TestNotification_Click" VerticalAlignment="Center"/>
                 <ToggleSwitch x:Name="StartupSwitch" Header="開機啟動" OffContent="關閉" OnContent="開啟" Toggled="StartupSwitch_Toggled" Margin="0,0,10,0"/>
@@ -91,6 +94,7 @@
                                 <TextBlock Text="{x:Bind Account}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
                             </StackPanel>
                             <TextBlock Text="{x:Bind NextDate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12" Margin="0,4,0,0"/>
+                            <TextBlock Text="{x:Bind Note}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,2,0,0"/>
                         </StackPanel>
 
                         <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">

@@ -56,15 +56,37 @@ namespace unoappwritetrae20260119.Services
 
                     foreach (var doc in response.Documents)
                     {
-                        var json = JsonConvert.SerializeObject(doc.Data);
-                        var sub = JsonConvert.DeserializeObject<Subscription>(json);
-
-                        if (sub != null)
+                        try
                         {
-                            sub.Id = doc.Id;
-                            sub.CreatedAt = doc.CreatedAt;
-                            sub.UpdatedAt = doc.UpdatedAt;
-                            subscriptions.Add(sub);
+                            var json = JsonConvert.SerializeObject(doc.Data);
+                            System.Diagnostics.Debug.WriteLine($"Document {doc.Id}: {json}");
+                            var settings = new JsonSerializerSettings
+                            {
+                                MissingMemberHandling = MissingMemberHandling.Ignore,
+                                NullValueHandling = NullValueHandling.Ignore,
+                                Error = (sender, args) =>
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"JSON parse error for doc {doc.Id}: {args.ErrorContext.Error.Message}");
+                                    args.ErrorContext.Handled = true; // Skip this field, don't fail
+                                }
+                            };
+                            var sub = JsonConvert.DeserializeObject<Subscription>(json, settings);
+
+                            if (sub != null)
+                            {
+                                sub.Id = doc.Id;
+                                sub.CreatedAt = doc.CreatedAt;
+                                sub.UpdatedAt = doc.UpdatedAt;
+                                subscriptions.Add(sub);
+                            }
+                            else
+                            {
+                                System.Diagnostics.Debug.WriteLine($"WARNING: Document {doc.Id} deserialized to null. Raw data: {json}");
+                            }
+                        }
+                        catch (System.Exception docEx)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"ERROR deserializing document {doc.Id}: {docEx.Message}");
                         }
                     }
 

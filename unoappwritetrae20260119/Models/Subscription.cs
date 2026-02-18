@@ -15,7 +15,7 @@ namespace unoappwritetrae20260119.Models
         public string? Site { get; set; }
 
         [JsonProperty("price")]
-        public int Price { get; set; }
+        public int? Price { get; set; }
 
         [JsonProperty("nextdate")]
         public string? NextDate { get; set; } // Keeping as string for now to avoid parsing issues, or DateTime
