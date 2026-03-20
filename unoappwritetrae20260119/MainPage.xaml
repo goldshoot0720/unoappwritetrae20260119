@@ -1,7 +1,6 @@
 <Page x:Class="unoappwritetrae20260119.MainPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      xmlns:local="using:unoappwritetrae20260119"
       xmlns:models="using:unoappwritetrae20260119.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:tb="using:H.NotifyIcon"
@@ -53,280 +52,628 @@
                     CornerRadius="270"/>
         </Grid>
 
-        <Grid MaxWidth="1320"
+        <Grid MaxWidth="1380"
               Margin="28"
               HorizontalAlignment="Center"
-              VerticalAlignment="Stretch">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
+              VerticalAlignment="Stretch"
+              ColumnSpacing="24">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-            <Border Grid.Row="0"
-                    Padding="28"
-                    Margin="0,0,0,18"
+            <Border Grid.Column="0"
+                    Padding="22"
                     Background="{StaticResource HeroPanelBrush}"
                     BorderBrush="{StaticResource PanelStrongBrush}"
                     BorderThickness="1"
                     CornerRadius="30">
-                <Grid ColumnSpacing="28">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
 
                     <StackPanel Spacing="18">
-                        <StackPanel Spacing="8">
-                            <TextBlock Text="Subscriptions"
-                                       FontSize="38"
+                        <StackPanel Spacing="6">
+                            <TextBlock Text="Control"
+                                       FontSize="14"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource AccentStrongBrush}"/>
+                            <TextBlock Text="Workspace"
+                                       FontSize="28"
                                        FontWeight="SemiBold"
                                        Foreground="{StaticResource TextPrimaryBrush}"/>
-                            <Border Background="{StaticResource PanelSurfaceBrush}"
-                                    BorderBrush="{StaticResource PanelStrongBrush}"
-                                    BorderThickness="1"
-                                    CornerRadius="999"
-                                    Padding="14,8"
-                                    HorizontalAlignment="Left">
-                                <TextBlock x:Name="SubscriptionCountText"
-                                           FontSize="14"
-                                           FontWeight="SemiBold"
-                                           Foreground="{StaticResource TextSecondaryBrush}"/>
-                            </Border>
                         </StackPanel>
 
-                        <Grid ColumnSpacing="28">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-
-                            <StackPanel Spacing="4">
-                                <TextBlock Text="Status" Style="{StaticResource HeaderLabelStyle}"/>
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <Ellipse Width="10" Height="10" Fill="{StaticResource HighlightBrush}" VerticalAlignment="Center"/>
-                                    <TextBlock Text="Live" Style="{StaticResource HeaderValueStyle}"/>
-                                </StackPanel>
+                        <Border Background="{StaticResource PanelSurfaceBrush}"
+                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                BorderThickness="1"
+                                CornerRadius="22"
+                                Padding="16">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="Navigation"
+                                           FontSize="13"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                <TextBlock Text="新增功能與資料監測都從這裡進入"
+                                           FontSize="18"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                           TextWrapping="Wrap"/>
                             </StackPanel>
-
-                            <StackPanel Grid.Column="1" Spacing="4">
-                                <TextBlock Text="Layout" Style="{StaticResource HeaderLabelStyle}"/>
-                                <TextBlock Text="Modern Grid" Style="{StaticResource HeaderValueStyle}"/>
-                            </StackPanel>
-
-                            <StackPanel Grid.Column="2" Spacing="4">
-                                <TextBlock Text="Theme" Style="{StaticResource HeaderLabelStyle}"/>
-                                <TextBlock Text="Tech Surface" Style="{StaticResource HeaderValueStyle}"/>
-                            </StackPanel>
-                        </Grid>
+                        </Border>
                     </StackPanel>
 
-                    <Border Grid.Column="1"
-                            MinWidth="360"
-                            Padding="22"
+                    <StackPanel Grid.Row="1"
+                                Margin="0,26,0,0"
+                                Spacing="10"
+                                VerticalAlignment="Top">
+                        <Button Click="OnSubscriptionsNavClick"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="SubscriptionNavItem"
+                                    Background="{StaticResource PanelSurfaceBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource AccentPanelBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="S"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="訂閱管理"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="目前頁面"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnOilMonitoringNavClick"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="OilMonitoringNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource AccentBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="O"
+                                                   Foreground="White"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="原油監測"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="OQD Daily Marker Price"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+                    </StackPanel>
+
+                    <Border Grid.Row="2"
+                            Margin="0,18,0,0"
+                            Padding="14"
                             Background="{StaticResource PanelSurfaceBrush}"
                             BorderBrush="{StaticResource PanelStrongBrush}"
                             BorderThickness="1"
-                            CornerRadius="24">
-                        <StackPanel Spacing="14">
-                            <Button Content="測試通知"
-                                    Click="TestNotification_Click"
-                                    Style="{StaticResource PrimaryActionButtonStyle}"/>
-                            <ToggleSwitch x:Name="StartupSwitch"
-                                          Header="開機啟動"
-                                          OffContent="關閉"
-                                          OnContent="開啟"
-                                          Toggled="StartupSwitch_Toggled"
-                                          Style="{StaticResource GlassToggleStyle}"/>
-                            <Button Content="按日期排序"
-                                    x:Name="SortByNameButton"
-                                    Click="SortByNameButton_Click"
-                                    Style="{StaticResource ActionButtonStyle}"/>
-                            <Button Content="Refresh"
-                                    Click="RefreshButton_Click"
-                                    Style="{StaticResource ActionButtonStyle}"/>
+                            CornerRadius="20">
+                        <StackPanel Spacing="4">
+                            <TextBlock Text="System"
+                                       FontSize="12"
+                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                            <TextBlock Text="Tech Surface"
+                                       FontSize="16"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
                         </StackPanel>
                     </Border>
                 </Grid>
             </Border>
 
-            <Border x:Name="NotificationPanel"
-                    Grid.Row="1"
-                    Margin="0,0,0,18"
-                    Padding="20,16"
-                    Background="{StaticResource NotificationBackgroundBrush}"
-                    BorderBrush="{StaticResource NotificationBorderBrush}"
-                    BorderThickness="1"
-                    CornerRadius="24"
-                    Visibility="Collapsed">
-                <Grid ColumnSpacing="16">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+            <Grid Grid.Column="1">
+                <Border x:Name="SubscriptionsSection"
+                        Background="Transparent">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
 
-                    <Border Width="44"
-                            Height="44"
-                            Background="#FFF8E9"
-                            BorderBrush="{StaticResource NotificationBorderBrush}"
-                            BorderThickness="1"
-                            CornerRadius="22"
-                            VerticalAlignment="Top">
-                        <TextBlock Text="!"
-                                   FontSize="20"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource NotificationForegroundBrush}"
-                                   HorizontalAlignment="Center"
-                                   VerticalAlignment="Center"/>
-                    </Border>
+                        <Border Grid.Row="0"
+                                Padding="28"
+                                Margin="0,0,0,18"
+                                Background="{StaticResource HeroPanelBrush}"
+                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                BorderThickness="1"
+                                CornerRadius="30">
+                            <Grid ColumnSpacing="28">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
 
-                    <StackPanel Grid.Column="1" Spacing="6">
-                        <TextBlock Text="通知"
-                                   FontSize="16"
-                                   FontWeight="SemiBold"
-                                   Foreground="{StaticResource NotificationForegroundBrush}"/>
-                        <ItemsControl x:Name="NotificationList">
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate x:DataType="x:String">
-                                    <TextBlock Text="{x:Bind}"
-                                               Foreground="{StaticResource NotificationForegroundBrush}"
-                                               FontSize="13"
-                                               TextWrapping="Wrap"
-                                               Margin="0,2,0,0"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </StackPanel>
+                                <StackPanel Spacing="18">
+                                    <StackPanel Spacing="8">
+                                        <TextBlock Text="Subscriptions"
+                                                   FontSize="38"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <Border Background="{StaticResource PanelSurfaceBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="999"
+                                                Padding="14,8"
+                                                HorizontalAlignment="Left">
+                                            <TextBlock x:Name="SubscriptionCountText"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </Border>
+                                    </StackPanel>
 
-                    <Button Grid.Column="2"
-                            Content="✕"
-                            Click="DismissNotification_Click"
-                            Background="Transparent"
-                            BorderThickness="0"
-                            Foreground="{StaticResource NotificationForegroundBrush}"
-                            FontSize="18"
-                            Padding="8,2"
-                            VerticalAlignment="Top"/>
-                </Grid>
-            </Border>
-
-            <Border Grid.Row="2"
-                    Padding="24"
-                    Background="{StaticResource PanelSurfaceBrush}"
-                    BorderBrush="{StaticResource PanelStrongBrush}"
-                    BorderThickness="1"
-                    CornerRadius="30">
-                <Grid>
-                    <ListView Grid.Row="0"
-                              ItemsSource="{x:Bind Subscriptions, Mode=OneWay}"
-                              SelectionMode="None"
-                              Style="{StaticResource SubscriptionListStyle}">
-                        <ListView.ItemContainerStyle>
-                            <Style TargetType="ListViewItem">
-                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                <Setter Property="Padding" Value="0"/>
-                                <Setter Property="Margin" Value="0,0,0,14"/>
-                                <Setter Property="Background" Value="Transparent"/>
-                                <Setter Property="BorderThickness" Value="0"/>
-                            </Style>
-                        </ListView.ItemContainerStyle>
-                        <ListView.ItemTemplate>
-                            <DataTemplate x:DataType="models:Subscription">
-                                <Border Background="{StaticResource PanelMutedBrush}"
-                                        BorderBrush="{StaticResource PanelStrongBrush}"
-                                        BorderThickness="1"
-                                        CornerRadius="24"
-                                        Padding="22,20">
-                                    <Grid ColumnSpacing="18">
+                                    <Grid ColumnSpacing="28">
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="6"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
                                             <ColumnDefinition Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
-                                        <Border Background="{StaticResource AccentBrush}"
-                                                CornerRadius="999"
-                                                Margin="0,2,0,2"/>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="Status" Style="{StaticResource HeaderLabelStyle}"/>
+                                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                                <Ellipse Width="10" Height="10" Fill="{StaticResource HighlightBrush}" VerticalAlignment="Center"/>
+                                                <TextBlock Text="Live" Style="{StaticResource HeaderValueStyle}"/>
+                                            </StackPanel>
+                                        </StackPanel>
 
-                                        <StackPanel Grid.Column="1" Spacing="10">
-                                            <TextBlock Text="{x:Bind Name}"
-                                                       FontSize="22"
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock Text="Layout" Style="{StaticResource HeaderLabelStyle}"/>
+                                            <TextBlock Text="Modern Grid" Style="{StaticResource HeaderValueStyle}"/>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2" Spacing="4">
+                                            <TextBlock Text="Theme" Style="{StaticResource HeaderLabelStyle}"/>
+                                            <TextBlock Text="Tech Surface" Style="{StaticResource HeaderValueStyle}"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </StackPanel>
+
+                                <Border Grid.Column="1"
+                                        MinWidth="360"
+                                        Padding="22"
+                                        Background="{StaticResource PanelSurfaceBrush}"
+                                        BorderBrush="{StaticResource PanelStrongBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="24">
+                                    <StackPanel Spacing="14">
+                                        <Button Content="測試通知"
+                                                Click="TestNotification_Click"
+                                                Style="{StaticResource PrimaryActionButtonStyle}"/>
+                                        <ToggleSwitch x:Name="StartupSwitch"
+                                                      Header="開機啟動"
+                                                      OffContent="關閉"
+                                                      OnContent="開啟"
+                                                      Toggled="StartupSwitch_Toggled"
+                                                      Style="{StaticResource GlassToggleStyle}"/>
+                                        <Button Content="按日期排序"
+                                                x:Name="SortByNameButton"
+                                                Click="SortByNameButton_Click"
+                                                Style="{StaticResource ActionButtonStyle}"/>
+                                        <Button Content="Refresh"
+                                                Click="RefreshButton_Click"
+                                                Style="{StaticResource ActionButtonStyle}"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </Border>
+
+                        <Border x:Name="NotificationPanel"
+                                Grid.Row="1"
+                                Margin="0,0,0,18"
+                                Padding="20,16"
+                                Background="{StaticResource NotificationBackgroundBrush}"
+                                BorderBrush="{StaticResource NotificationBorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="24"
+                                Visibility="Collapsed">
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Width="44"
+                                        Height="44"
+                                        Background="#FFF8E9"
+                                        BorderBrush="{StaticResource NotificationBorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="22"
+                                        VerticalAlignment="Top">
+                                    <TextBlock Text="!"
+                                               FontSize="20"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource NotificationForegroundBrush}"
+                                               HorizontalAlignment="Center"
+                                               VerticalAlignment="Center"/>
+                                </Border>
+
+                                <StackPanel Grid.Column="1" Spacing="6">
+                                    <TextBlock Text="通知"
+                                               FontSize="16"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource NotificationForegroundBrush}"/>
+                                    <ItemsControl x:Name="NotificationList">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="x:String">
+                                                <TextBlock Text="{x:Bind}"
+                                                           Foreground="{StaticResource NotificationForegroundBrush}"
+                                                           FontSize="13"
+                                                           TextWrapping="Wrap"
+                                                           Margin="0,2,0,0"/>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+
+                                <Button Grid.Column="2"
+                                        Content="✕"
+                                        Click="DismissNotification_Click"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        Foreground="{StaticResource NotificationForegroundBrush}"
+                                        FontSize="18"
+                                        Padding="8,2"
+                                        VerticalAlignment="Top"/>
+                            </Grid>
+                        </Border>
+
+                        <Border Grid.Row="2"
+                                Padding="24"
+                                Background="{StaticResource PanelSurfaceBrush}"
+                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                BorderThickness="1"
+                                CornerRadius="30">
+                            <Grid>
+                                <ListView ItemsSource="{x:Bind Subscriptions, Mode=OneWay}"
+                                          SelectionMode="None"
+                                          Style="{StaticResource SubscriptionListStyle}">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                            <Setter Property="Padding" Value="0"/>
+                                            <Setter Property="Margin" Value="0,0,0,14"/>
+                                            <Setter Property="Background" Value="Transparent"/>
+                                            <Setter Property="BorderThickness" Value="0"/>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="models:Subscription">
+                                            <Border Background="{StaticResource PanelMutedBrush}"
+                                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="24"
+                                                    Padding="22,20">
+                                                <Grid ColumnSpacing="18">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="6"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Border Background="{StaticResource AccentBrush}"
+                                                            CornerRadius="999"
+                                                            Margin="0,2,0,2"/>
+
+                                                    <StackPanel Grid.Column="1" Spacing="10">
+                                                        <TextBlock Text="{x:Bind Name}"
+                                                                   FontSize="22"
+                                                                   FontWeight="SemiBold"
+                                                                   Foreground="{StaticResource TextPrimaryBrush}"
+                                                                   TextWrapping="Wrap"/>
+
+                                                        <StackPanel Orientation="Horizontal" Spacing="10">
+                                                            <Border Background="{StaticResource PanelSurfaceBrush}"
+                                                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="999"
+                                                                    Padding="12,6">
+                                                                <TextBlock Text="{x:Bind Site}"
+                                                                           FontSize="12"
+                                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                            </Border>
+                                                            <Border Background="{StaticResource PanelSurfaceBrush}"
+                                                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                                                    BorderThickness="1"
+                                                                    CornerRadius="999"
+                                                                    Padding="12,6">
+                                                                <TextBlock Text="{x:Bind Account}"
+                                                                           FontSize="12"
+                                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                            </Border>
+                                                        </StackPanel>
+
+                                                        <StackPanel Spacing="6">
+                                                            <TextBlock Text="{x:Bind NextDate}"
+                                                                       FontSize="13"
+                                                                       FontWeight="SemiBold"
+                                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                            <TextBlock Text="{x:Bind Note}"
+                                                                       FontSize="12"
+                                                                       Foreground="{StaticResource TextTertiaryBrush}"
+                                                                       TextWrapping="Wrap"
+                                                                       FontStyle="Italic"/>
+                                                        </StackPanel>
+                                                    </StackPanel>
+
+                                                    <StackPanel Grid.Column="2"
+                                                                Width="170"
+                                                                VerticalAlignment="Center"
+                                                                Spacing="8">
+                                                        <Border Background="{StaticResource AccentPanelBrush}"
+                                                                BorderBrush="{StaticResource AccentSoftBrush}"
+                                                                BorderThickness="1"
+                                                                CornerRadius="20"
+                                                                Padding="18,16">
+                                                            <StackPanel Spacing="4">
+                                                                <TextBlock Text="{x:Bind Price}"
+                                                                           FontSize="30"
+                                                                           FontWeight="Bold"
+                                                                           Foreground="{StaticResource AccentStrongBrush}"
+                                                                           HorizontalAlignment="Right"/>
+                                                                <TextBlock Text="per month"
+                                                                           FontSize="11"
+                                                                           Foreground="{StaticResource TextSecondaryBrush}"
+                                                                           HorizontalAlignment="Right"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Border>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+
+                                <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}"
+                                              Width="42"
+                                              Height="42"
+                                              Foreground="{StaticResource AccentBrush}"
+                                              HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"/>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+
+                <Border x:Name="OilMonitoringSection"
+                        Visibility="Collapsed">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Border Grid.Row="0"
+                                Padding="28"
+                                Margin="0,0,0,18"
+                                Background="{StaticResource HeroPanelBrush}"
+                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                BorderThickness="1"
+                                CornerRadius="30">
+                            <Grid ColumnSpacing="28">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Spacing="12">
+                                    <TextBlock Text="原油監測"
+                                               FontSize="38"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock x:Name="OilMonitoringStatusText"
+                                               Text="每日 13:00 自動抓取"
+                                               FontSize="14"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    <TextBlock x:Name="OilSourceText"
+                                               Text="來源: gulfmerc.com 首頁 OQD Daily Marker Price"
+                                               FontSize="13"
+                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                </StackPanel>
+
+                                <StackPanel Grid.Column="1"
+                                            Spacing="12"
+                                            MinWidth="230">
+                                    <Button Content="立即抓取"
+                                            Click="FetchOilMonitoringButton_Click"
+                                            Style="{StaticResource PrimaryActionButtonStyle}"/>
+                                    <Button Content="重新整理圖表"
+                                            Click="RefreshOilMonitoringButton_Click"
+                                            Style="{StaticResource ActionButtonStyle}"/>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+
+                        <Grid Grid.Row="1"
+                              ColumnSpacing="18">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="1.1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    Padding="24"
+                                    Background="{StaticResource PanelSurfaceBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="30">
+                                <StackPanel Spacing="18">
+                                    <Grid ColumnSpacing="14">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="22"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="最新價格"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock x:Name="OilLatestPriceText"
+                                                           Text="--"
+                                                           FontSize="28"
+                                                           FontWeight="Bold"
+                                                           Foreground="{StaticResource AccentStrongBrush}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="1"
+                                                Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="22"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="最後更新"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock x:Name="OilLastUpdatedText"
+                                                           Text="尚未抓取"
+                                                           FontSize="18"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="2"
+                                                Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="22"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="歷史筆數"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock x:Name="OilHistoryCountText"
+                                                           Text="0 天"
+                                                           FontSize="18"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+
+                                    <Border Background="{StaticResource PanelMutedBrush}"
+                                            BorderBrush="{StaticResource PanelStrongBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="24"
+                                            Padding="16">
+                                        <Grid>
+                                            <Canvas x:Name="OilChartCanvas"
+                                                    Height="300"/>
+                                            <TextBlock x:Name="ChartEmptyState"
+                                                       Text="目前還沒有原油監測資料，先按一次立即抓取。"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       HorizontalAlignment="Center"
+                                                       VerticalAlignment="Center"/>
+                                        </Grid>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1"
+                                    Padding="24"
+                                    Background="{StaticResource PanelSurfaceBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="30">
+                                <StackPanel Spacing="16">
+                                    <TextBlock Text="監測摘要"
+                                               FontSize="24"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <Border Background="{StaticResource PanelMutedBrush}"
+                                            BorderBrush="{StaticResource PanelStrongBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="20"
+                                            Padding="16">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="資料來源"
+                                                       Style="{StaticResource HeaderLabelStyle}"/>
+                                            <TextBlock Text="Gulf Mercantile Exchange"
+                                                       FontSize="18"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="https://www.gulfmerc.com/"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"/>
+                                        </StackPanel>
+                                    </Border>
+                                    <Border Background="{StaticResource PanelMutedBrush}"
+                                            BorderBrush="{StaticResource PanelStrongBrush}"
+                                            BorderThickness="1"
+                                            CornerRadius="20"
+                                            Padding="16">
+                                        <StackPanel Spacing="6">
+                                            <TextBlock Text="抓取規則"
+                                                       Style="{StaticResource HeaderLabelStyle}"/>
+                                            <TextBlock Text="每日 13:00 自動抓取 OQD Daily Marker Price"
+                                                       FontSize="16"
                                                        FontWeight="SemiBold"
                                                        Foreground="{StaticResource TextPrimaryBrush}"
                                                        TextWrapping="Wrap"/>
-
-                                            <StackPanel Orientation="Horizontal" Spacing="10">
-                                                <Border Background="{StaticResource PanelSurfaceBrush}"
-                                                        BorderBrush="{StaticResource PanelStrongBrush}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="999"
-                                                        Padding="12,6">
-                                                    <TextBlock Text="{x:Bind Site}"
-                                                               FontSize="12"
-                                                               Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                </Border>
-                                                <Border Background="{StaticResource PanelSurfaceBrush}"
-                                                        BorderBrush="{StaticResource PanelStrongBrush}"
-                                                        BorderThickness="1"
-                                                        CornerRadius="999"
-                                                        Padding="12,6">
-                                                    <TextBlock Text="{x:Bind Account}"
-                                                               FontSize="12"
-                                                               Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                </Border>
-                                            </StackPanel>
-
-                                            <StackPanel Spacing="6">
-                                                <TextBlock Text="{x:Bind NextDate}"
-                                                           FontSize="13"
-                                                           FontWeight="SemiBold"
-                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                <TextBlock Text="{x:Bind Note}"
-                                                           FontSize="12"
-                                                           Foreground="{StaticResource TextTertiaryBrush}"
-                                                           TextWrapping="Wrap"
-                                                           FontStyle="Italic"/>
-                                            </StackPanel>
+                                            <TextBlock Text="啟動常駐後會持續累積本機歷史資料，供圖表使用。"
+                                                       FontSize="12"
+                                                       Foreground="{StaticResource TextSecondaryBrush}"
+                                                       TextWrapping="Wrap"/>
                                         </StackPanel>
-
-                                        <StackPanel Grid.Column="2"
-                                                    Width="170"
-                                                    VerticalAlignment="Center"
-                                                    Spacing="8">
-                                            <Border Background="{StaticResource AccentPanelBrush}"
-                                                    BorderBrush="{StaticResource AccentSoftBrush}"
-                                                    BorderThickness="1"
-                                                    CornerRadius="20"
-                                                    Padding="18,16">
-                                                <StackPanel Spacing="4">
-                                                    <TextBlock Text="{x:Bind Price}"
-                                                               FontSize="30"
-                                                               FontWeight="Bold"
-                                                               Foreground="{StaticResource AccentStrongBrush}"
-                                                               HorizontalAlignment="Right"/>
-                                                    <TextBlock Text="per month"
-                                                               FontSize="11"
-                                                               Foreground="{StaticResource TextSecondaryBrush}"
-                                                               HorizontalAlignment="Right"/>
-                                                </StackPanel>
-                                            </Border>
-                                        </StackPanel>
-                                    </Grid>
-                                </Border>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-
-                    <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}"
-                                  Width="42"
-                                  Height="42"
-                                  Foreground="{StaticResource AccentBrush}"
-                                  HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
-                </Grid>
-            </Border>
+                                    </Border>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+                    </Grid>
+                </Border>
+            </Grid>
         </Grid>
     </Grid>
 </Page>
