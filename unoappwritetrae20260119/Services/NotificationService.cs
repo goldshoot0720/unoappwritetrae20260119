@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+#if WINDOWS
 using Microsoft.Toolkit.Uwp.Notifications;
+#endif
 
 namespace unoappwritetrae20260119.Services
 {
@@ -130,10 +132,14 @@ namespace unoappwritetrae20260119.Services
 
             try
             {
+#if WINDOWS
                 new ToastContentBuilder()
                     .AddText(title)
                     .AddText(text)
                     .Show();
+#else
+                Debug.WriteLine($"{title} - {text}");
+#endif
             }
             catch (Exception ex)
             {

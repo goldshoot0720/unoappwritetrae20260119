@@ -8,6 +8,9 @@
     }
   },
   "profiles": {
+    "unoappwritetrae20260119 (Desktop)": {
+      "commandName": "Project"
+    },
     "unoappwritetrae20260119 (Windows)": {
       "commandName": "Project"
     }

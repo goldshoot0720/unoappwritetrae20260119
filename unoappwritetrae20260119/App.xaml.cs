@@ -70,11 +70,15 @@ public partial class App : Application
         {
             try
             {
+#if WINDOWS
                 var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
                 var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
                 var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
                 
                 appWindow.Hide();
+#else
+                MainWindow?.Close();
+#endif
             }
             catch (Exception ex)
             {
@@ -89,6 +93,7 @@ public partial class App : Application
         {
             try
             {
+#if WINDOWS
                 var hWnd = WinRT.Interop.WindowNative.GetWindowHandle(MainWindow);
                 var windowId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
                 var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
@@ -106,6 +111,9 @@ public partial class App : Application
                 
                 // Bring to front
                 MainWindow.Activate();
+#else
+                MainWindow?.Activate();
+#endif
             }
             catch (Exception ex)
             {

@@ -1,7 +1,8 @@
 <Project Sdk="Uno.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net9.0-windows10.0.19041.0</TargetFrameworks>
-    <WindowsPackageType>None</WindowsPackageType>
+    <TargetFrameworks>net9.0-desktop</TargetFrameworks>
+    <TargetFrameworks Condition=" $([MSBuild]::IsOSPlatform('windows')) ">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
+    <WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
     <OutputType>Exe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
 
@@ -32,6 +33,9 @@
     <PackageReference Include="Appwrite" />
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications" />
     <PackageReference Include="Newtonsoft.Json" />
+  </ItemGroup>
+
+  <ItemGroup Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">
     <PackageReference Include="H.NotifyIcon.WinUI" />
   </ItemGroup>
 

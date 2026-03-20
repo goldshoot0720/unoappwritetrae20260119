@@ -41,6 +41,7 @@ public sealed partial class MainPage : Page
     {
         InitializeComponent();
 
+#if WINDOWS
         var trayIcon = new H.NotifyIcon.TaskbarIcon
         {
             ToolTipText = "UnoAppwriteTrae",
@@ -48,6 +49,7 @@ public sealed partial class MainPage : Page
             LeftClickCommand = RestoreCommand
         };
         RootGrid.Children.Add(trayIcon);
+#endif
 
         _appwriteService = new AppwriteService();
         _startupService = new StartupService();
