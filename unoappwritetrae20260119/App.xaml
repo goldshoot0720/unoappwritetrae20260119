@@ -11,7 +11,58 @@
         <ToolkitResources xmlns="using:Uno.Toolkit.UI" />
       </ResourceDictionary.MergedDictionaries>
 
-      <!-- Add resources here -->
+      <SolidColorBrush x:Key="AppCanvasBrush" Color="#F4F7FB" />
+      <SolidColorBrush x:Key="PanelSurfaceBrush" Color="#FDFEFF" />
+      <SolidColorBrush x:Key="PanelMutedBrush" Color="#EEF3F8" />
+      <SolidColorBrush x:Key="PanelStrongBrush" Color="#D9E3EE" />
+      <SolidColorBrush x:Key="AccentBrush" Color="#0E7490" />
+      <SolidColorBrush x:Key="AccentStrongBrush" Color="#0B5F75" />
+      <SolidColorBrush x:Key="AccentSoftBrush" Color="#D9F1F4" />
+      <SolidColorBrush x:Key="HighlightBrush" Color="#7C9B00" />
+      <SolidColorBrush x:Key="TextPrimaryBrush" Color="#142133" />
+      <SolidColorBrush x:Key="TextSecondaryBrush" Color="#5A687B" />
+      <SolidColorBrush x:Key="TextTertiaryBrush" Color="#7A8798" />
+      <SolidColorBrush x:Key="NotificationBackgroundBrush" Color="#FFF4DB" />
+      <SolidColorBrush x:Key="NotificationBorderBrush" Color="#F0D089" />
+      <SolidColorBrush x:Key="NotificationForegroundBrush" Color="#7B5B10" />
+
+      <LinearGradientBrush x:Key="HeroPanelBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#FDFEFF" Offset="0" />
+        <GradientStop Color="#EFF6FB" Offset="0.62" />
+        <GradientStop Color="#E4EEF7" Offset="1" />
+      </LinearGradientBrush>
+
+      <LinearGradientBrush x:Key="AccentPanelBrush" StartPoint="0,0" EndPoint="1,1">
+        <GradientStop Color="#E8F7F9" Offset="0" />
+        <GradientStop Color="#DDF1F6" Offset="1" />
+      </LinearGradientBrush>
+
+      <Style x:Key="ActionButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PanelSurfaceBrush}" />
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="BorderBrush" Value="{StaticResource PanelStrongBrush}" />
+        <Setter Property="BorderThickness" Value="1" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="Padding" Value="18,11" />
+        <Setter Property="MinHeight" Value="44" />
+      </Style>
+
+      <Style x:Key="PrimaryActionButtonStyle" TargetType="Button" BasedOn="{StaticResource ActionButtonStyle}">
+        <Setter Property="Background" Value="{StaticResource AccentBrush}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="BorderBrush" Value="{StaticResource AccentBrush}" />
+      </Style>
+
+      <Style x:Key="GlassToggleStyle" TargetType="ToggleSwitch">
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}" />
+        <Setter Property="Margin" Value="0" />
+      </Style>
+
+      <Style x:Key="SubscriptionListStyle" TargetType="ListView">
+        <Setter Property="Background" Value="Transparent" />
+        <Setter Property="BorderThickness" Value="0" />
+        <Setter Property="Padding" Value="0" />
+      </Style>
 
     </ResourceDictionary>
   </Application.Resources>

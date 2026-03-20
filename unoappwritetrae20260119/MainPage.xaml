@@ -5,7 +5,20 @@
       xmlns:models="using:unoappwritetrae20260119.Models"
       xmlns:utu="using:Uno.Toolkit.UI"
       xmlns:tb="using:H.NotifyIcon"
-      Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+      Background="{StaticResource AppCanvasBrush}">
+
+    <Page.Resources>
+        <Style x:Key="HeaderLabelStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="HeaderValueStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+    </Page.Resources>
 
     <Grid x:Name="RootGrid" utu:SafeArea.Insets="VisibleBounds">
         <!--<tb:TaskbarIcon x:Name="TrayIcon"
@@ -13,100 +26,307 @@
                         IconSource="ms-appx:///icon.ico"
                         LeftClickCommand="{x:Bind RestoreCommand}" />-->
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-
-        <!-- Header -->
-        <Grid Grid.Row="0" Padding="20" Background="{ThemeResource SystemControlBackgroundChromeMediumLowBrush}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <StackPanel Orientation="Horizontal" Spacing="12" VerticalAlignment="Center">
-                <TextBlock Text="Subscriptions" FontSize="28" FontWeight="Bold"/>
-                <TextBlock x:Name="SubscriptionCountText" FontSize="16" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" VerticalAlignment="Bottom" Margin="0,0,0,3"/>
-            </StackPanel>
-            <StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="10" VerticalAlignment="Center">
-                <Button Content="測試通知" Click="TestNotification_Click" VerticalAlignment="Center"/>
-                <ToggleSwitch x:Name="StartupSwitch" Header="開機啟動" OffContent="關閉" OnContent="開啟" Toggled="StartupSwitch_Toggled" Margin="0,0,10,0"/>
-                <Button Content="按日期排序" x:Name="SortByNameButton" Click="SortByNameButton_Click" VerticalAlignment="Center"/>
-                <Button Content="Refresh" Click="RefreshButton_Click" VerticalAlignment="Center"/>
-            </StackPanel>
+        <Grid>
+            <Border Width="420"
+                    Height="420"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    Margin="-140,-120,0,0"
+                    Background="{StaticResource AccentSoftBrush}"
+                    Opacity="0.72"
+                    CornerRadius="210"/>
+            <Border Width="360"
+                    Height="360"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,-100,-90,0"
+                    Background="#DDE9F7"
+                    Opacity="0.8"
+                    CornerRadius="180"/>
+            <Border Width="540"
+                    Height="540"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Bottom"
+                    Margin="0,0,0,-280"
+                    Background="#E8F0D5"
+                    Opacity="0.45"
+                    CornerRadius="270"/>
         </Grid>
 
-        <!-- In-Window Notification Banner -->
-        <Border x:Name="NotificationPanel" Grid.Row="1" 
-                Background="#FFF3CD" BorderBrush="#FFEEBA" BorderThickness="0,0,0,1"
-                Padding="16,12" Visibility="Collapsed">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                
-                <!-- Warning Icon -->
-                <TextBlock Grid.Column="0" Text="🔔" FontSize="20" VerticalAlignment="Top" Margin="0,2,12,0"/>
-                
-                <!-- Notification Messages -->
-                <StackPanel Grid.Column="1">
-                    <TextBlock Text="訂閱到期提醒" FontWeight="Bold" FontSize="14" Foreground="#856404" Margin="0,0,0,6"/>
-                    <ItemsControl x:Name="NotificationList">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="x:String">
-                                <TextBlock Text="{x:Bind}" Foreground="#856404" FontSize="13" TextWrapping="Wrap" Margin="0,2"/>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-                
-                <!-- Dismiss Button -->
-                <Button Grid.Column="2" Content="✕" Click="DismissNotification_Click"
-                        Background="Transparent" BorderThickness="0" 
-                        Foreground="#856404" FontSize="16"
-                        VerticalAlignment="Top" Padding="8,4"/>
-            </Grid>
-        </Border>
+        <Grid MaxWidth="1320"
+              Margin="28"
+              HorizontalAlignment="Center"
+              VerticalAlignment="Stretch">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <!-- Content -->
-        <ListView Grid.Row="2" ItemsSource="{x:Bind Subscriptions, Mode=OneWay}" SelectionMode="None" Padding="10">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
-                <DataTemplate x:DataType="models:Subscription">
-                    <Grid Margin="0,5" Padding="15" CornerRadius="12" Background="{ThemeResource SystemControlBackgroundAltHighBrush}" BorderBrush="{ThemeResource SystemControlBackgroundBaseLowBrush}" BorderThickness="1">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
+            <Border Grid.Row="0"
+                    Padding="28"
+                    Margin="0,0,0,18"
+                    Background="{StaticResource HeroPanelBrush}"
+                    BorderBrush="{StaticResource PanelStrongBrush}"
+                    BorderThickness="1"
+                    CornerRadius="30">
+                <Grid ColumnSpacing="28">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                        <StackPanel Grid.Column="0" Spacing="4">
-                            <TextBlock Text="{x:Bind Name}" FontSize="18" FontWeight="SemiBold"/>
-                            <StackPanel Orientation="Horizontal" Spacing="8">
-                                <TextBlock Text="{x:Bind Site}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
-                                <TextBlock Text="|" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
-                                <TextBlock Text="{x:Bind Account}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12"/>
+                    <StackPanel Spacing="18">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="Subscriptions"
+                                       FontSize="38"
+                                       FontWeight="SemiBold"
+                                       Foreground="{StaticResource TextPrimaryBrush}"/>
+                            <Border Background="{StaticResource PanelSurfaceBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="999"
+                                    Padding="14,8"
+                                    HorizontalAlignment="Left">
+                                <TextBlock x:Name="SubscriptionCountText"
+                                           FontSize="14"
+                                           FontWeight="SemiBold"
+                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </Border>
+                        </StackPanel>
+
+                        <Grid ColumnSpacing="28">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="Status" Style="{StaticResource HeaderLabelStyle}"/>
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Ellipse Width="10" Height="10" Fill="{StaticResource HighlightBrush}" VerticalAlignment="Center"/>
+                                    <TextBlock Text="Live" Style="{StaticResource HeaderValueStyle}"/>
+                                </StackPanel>
                             </StackPanel>
-                            <TextBlock Text="{x:Bind NextDate}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="12" Margin="0,4,0,0"/>
-                            <TextBlock Text="{x:Bind Note}" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" FontSize="11" FontStyle="Italic" TextWrapping="Wrap" Margin="0,2,0,0"/>
-                        </StackPanel>
 
-                        <StackPanel Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
-                            <TextBlock Text="{x:Bind Price}" FontSize="24" FontWeight="Bold" Foreground="{ThemeResource SystemControlForegroundAccentBrush}" HorizontalAlignment="Right"/>
-                            <TextBlock Text="per month" FontSize="10" Foreground="{ThemeResource SystemControlForegroundBaseMediumBrush}" HorizontalAlignment="Right"/>
-                        </StackPanel>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+                            <StackPanel Grid.Column="1" Spacing="4">
+                                <TextBlock Text="Layout" Style="{StaticResource HeaderLabelStyle}"/>
+                                <TextBlock Text="Modern Grid" Style="{StaticResource HeaderValueStyle}"/>
+                            </StackPanel>
 
-        <!-- Loading Indicator -->
-        <ProgressRing Grid.Row="2" IsActive="{x:Bind IsLoading, Mode=OneWay}" Width="50" Height="50" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="2" Spacing="4">
+                                <TextBlock Text="Theme" Style="{StaticResource HeaderLabelStyle}"/>
+                                <TextBlock Text="Tech Surface" Style="{StaticResource HeaderValueStyle}"/>
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+
+                    <Border Grid.Column="1"
+                            MinWidth="360"
+                            Padding="22"
+                            Background="{StaticResource PanelSurfaceBrush}"
+                            BorderBrush="{StaticResource PanelStrongBrush}"
+                            BorderThickness="1"
+                            CornerRadius="24">
+                        <StackPanel Spacing="14">
+                            <Button Content="測試通知"
+                                    Click="TestNotification_Click"
+                                    Style="{StaticResource PrimaryActionButtonStyle}"/>
+                            <ToggleSwitch x:Name="StartupSwitch"
+                                          Header="開機啟動"
+                                          OffContent="關閉"
+                                          OnContent="開啟"
+                                          Toggled="StartupSwitch_Toggled"
+                                          Style="{StaticResource GlassToggleStyle}"/>
+                            <Button Content="按日期排序"
+                                    x:Name="SortByNameButton"
+                                    Click="SortByNameButton_Click"
+                                    Style="{StaticResource ActionButtonStyle}"/>
+                            <Button Content="Refresh"
+                                    Click="RefreshButton_Click"
+                                    Style="{StaticResource ActionButtonStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </Border>
+
+            <Border x:Name="NotificationPanel"
+                    Grid.Row="1"
+                    Margin="0,0,0,18"
+                    Padding="20,16"
+                    Background="{StaticResource NotificationBackgroundBrush}"
+                    BorderBrush="{StaticResource NotificationBorderBrush}"
+                    BorderThickness="1"
+                    CornerRadius="24"
+                    Visibility="Collapsed">
+                <Grid ColumnSpacing="16">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Width="44"
+                            Height="44"
+                            Background="#FFF8E9"
+                            BorderBrush="{StaticResource NotificationBorderBrush}"
+                            BorderThickness="1"
+                            CornerRadius="22"
+                            VerticalAlignment="Top">
+                        <TextBlock Text="!"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource NotificationForegroundBrush}"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+                    </Border>
+
+                    <StackPanel Grid.Column="1" Spacing="6">
+                        <TextBlock Text="通知"
+                                   FontSize="16"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource NotificationForegroundBrush}"/>
+                        <ItemsControl x:Name="NotificationList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <TextBlock Text="{x:Bind}"
+                                               Foreground="{StaticResource NotificationForegroundBrush}"
+                                               FontSize="13"
+                                               TextWrapping="Wrap"
+                                               Margin="0,2,0,0"/>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+
+                    <Button Grid.Column="2"
+                            Content="✕"
+                            Click="DismissNotification_Click"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="{StaticResource NotificationForegroundBrush}"
+                            FontSize="18"
+                            Padding="8,2"
+                            VerticalAlignment="Top"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Row="2"
+                    Padding="24"
+                    Background="{StaticResource PanelSurfaceBrush}"
+                    BorderBrush="{StaticResource PanelStrongBrush}"
+                    BorderThickness="1"
+                    CornerRadius="30">
+                <Grid>
+                    <ListView Grid.Row="0"
+                              ItemsSource="{x:Bind Subscriptions, Mode=OneWay}"
+                              SelectionMode="None"
+                              Style="{StaticResource SubscriptionListStyle}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Padding" Value="0"/>
+                                <Setter Property="Margin" Value="0,0,0,14"/>
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="BorderThickness" Value="0"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Subscription">
+                                <Border Background="{StaticResource PanelMutedBrush}"
+                                        BorderBrush="{StaticResource PanelStrongBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="24"
+                                        Padding="22,20">
+                                    <Grid ColumnSpacing="18">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="6"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Background="{StaticResource AccentBrush}"
+                                                CornerRadius="999"
+                                                Margin="0,2,0,2"/>
+
+                                        <StackPanel Grid.Column="1" Spacing="10">
+                                            <TextBlock Text="{x:Bind Name}"
+                                                       FontSize="22"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="{StaticResource TextPrimaryBrush}"
+                                                       TextWrapping="Wrap"/>
+
+                                            <StackPanel Orientation="Horizontal" Spacing="10">
+                                                <Border Background="{StaticResource PanelSurfaceBrush}"
+                                                        BorderBrush="{StaticResource PanelStrongBrush}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="999"
+                                                        Padding="12,6">
+                                                    <TextBlock Text="{x:Bind Site}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                </Border>
+                                                <Border Background="{StaticResource PanelSurfaceBrush}"
+                                                        BorderBrush="{StaticResource PanelStrongBrush}"
+                                                        BorderThickness="1"
+                                                        CornerRadius="999"
+                                                        Padding="12,6">
+                                                    <TextBlock Text="{x:Bind Account}"
+                                                               FontSize="12"
+                                                               Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                </Border>
+                                            </StackPanel>
+
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="{x:Bind NextDate}"
+                                                           FontSize="13"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                <TextBlock Text="{x:Bind Note}"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource TextTertiaryBrush}"
+                                                           TextWrapping="Wrap"
+                                                           FontStyle="Italic"/>
+                                            </StackPanel>
+                                        </StackPanel>
+
+                                        <StackPanel Grid.Column="2"
+                                                    Width="170"
+                                                    VerticalAlignment="Center"
+                                                    Spacing="8">
+                                            <Border Background="{StaticResource AccentPanelBrush}"
+                                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                                    BorderThickness="1"
+                                                    CornerRadius="20"
+                                                    Padding="18,16">
+                                                <StackPanel Spacing="4">
+                                                    <TextBlock Text="{x:Bind Price}"
+                                                               FontSize="30"
+                                                               FontWeight="Bold"
+                                                               Foreground="{StaticResource AccentStrongBrush}"
+                                                               HorizontalAlignment="Right"/>
+                                                    <TextBlock Text="per month"
+                                                               FontSize="11"
+                                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                                               HorizontalAlignment="Right"/>
+                                                </StackPanel>
+                                            </Border>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+
+                    <ProgressRing IsActive="{x:Bind IsLoading, Mode=OneWay}"
+                                  Width="42"
+                                  Height="42"
+                                  Foreground="{StaticResource AccentBrush}"
+                                  HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                </Grid>
+            </Border>
+        </Grid>
     </Grid>
 </Page>
