@@ -21,6 +21,8 @@ public sealed partial class MainPage : Page
     private readonly StartupService _startupService;
     private readonly NotificationService _notificationService;
     private readonly OqdMonitorService _oqdMonitorService;
+    private const double CompactLayoutBreakpoint = 1180;
+    private const double NarrowLayoutBreakpoint = 860;
     private bool _sortByName = true;
 
     public ObservableCollection<Subscription> Subscriptions { get; } = new();
@@ -69,11 +71,14 @@ public sealed partial class MainPage : Page
         }
 
         Loaded += MainPage_Loaded;
+        SizeChanged += MainPage_SizeChanged;
         OilChartCanvas.SizeChanged += OilChartCanvas_SizeChanged;
     }
 
     private async void MainPage_Loaded(object sender, RoutedEventArgs e)
     {
+        ApplyResponsiveLayout(ActualWidth);
+
         if (OperatingSystem.IsWindows())
         {
             var isStartup = _startupService.IsStartupEnabled();
@@ -118,6 +123,94 @@ public sealed partial class MainPage : Page
     private void OnSubscriptionsNavClick(object sender, RoutedEventArgs e) => SetActiveSection(isOilMonitoring: false);
 
     private void OnOilMonitoringNavClick(object sender, RoutedEventArgs e) => SetActiveSection(isOilMonitoring: true);
+
+    private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
+    {
+        ApplyResponsiveLayout(e.NewSize.Width);
+    }
+
+    private void ApplyResponsiveLayout(double width)
+    {
+        var compact = width < CompactLayoutBreakpoint;
+        var narrow = width < NarrowLayoutBreakpoint;
+
+        MainShellGrid.Margin = compact ? new Thickness(16) : new Thickness(28);
+        MainShellGrid.ColumnSpacing = compact ? 16 : 24;
+        MainShellGrid.RowSpacing = compact ? 16 : 24;
+
+        SidebarColumn.Width = compact ? new GridLength(1, GridUnitType.Star) : new GridLength(260);
+        ContentColumn.Width = compact ? new GridLength(0) : new GridLength(1, GridUnitType.Star);
+        MainShellBottomRow.Height = compact ? GridLength.Auto : new GridLength(0);
+
+        Grid.SetColumn(SidebarPanel, 0);
+        Grid.SetRow(SidebarPanel, 0);
+        Grid.SetColumnSpan(SidebarPanel, compact ? 2 : 1);
+        Grid.SetRowSpan(SidebarPanel, compact ? 1 : 2);
+
+        Grid.SetColumn(ContentHostGrid, compact ? 0 : 1);
+        Grid.SetRow(ContentHostGrid, compact ? 1 : 0);
+        Grid.SetColumnSpan(ContentHostGrid, compact ? 2 : 1);
+        Grid.SetRowSpan(ContentHostGrid, compact ? 1 : 2);
+
+        SubscriptionsHeroActionsColumn.Width = compact ? new GridLength(0) : GridLength.Auto;
+        SubscriptionsHeroBottomRow.Height = compact ? GridLength.Auto : new GridLength(0);
+        Grid.SetColumn(SubscriptionsActionsCard, compact ? 0 : 1);
+        Grid.SetRow(SubscriptionsActionsCard, compact ? 1 : 0);
+        Grid.SetColumnSpan(SubscriptionsActionsCard, compact ? 2 : 1);
+
+        OilHeroActionsColumn.Width = compact ? new GridLength(0) : GridLength.Auto;
+        OilHeroBottomRow.Height = compact ? GridLength.Auto : new GridLength(0);
+        Grid.SetColumn(OilHeroActionsPanel, compact ? 0 : 1);
+        Grid.SetRow(OilHeroActionsPanel, compact ? 1 : 0);
+        Grid.SetColumnSpan(OilHeroActionsPanel, compact ? 2 : 1);
+
+        OilSummaryColumn.Width = compact ? new GridLength(0) : new GridLength(1.1, GridUnitType.Star);
+        OilBodyBottomRow.Height = compact ? GridLength.Auto : new GridLength(0);
+        Grid.SetColumn(OilSummaryCard, compact ? 0 : 1);
+        Grid.SetRow(OilSummaryCard, compact ? 1 : 0);
+        Grid.SetColumnSpan(OilSummaryCard, compact ? 2 : 1);
+
+        if (narrow)
+        {
+            SubscriptionsMetaColumn2.Width = new GridLength(0);
+            SubscriptionsMetaColumn3.Width = new GridLength(0);
+            SubscriptionsMetaRow2.Height = GridLength.Auto;
+            SubscriptionsMetaRow3.Height = GridLength.Auto;
+            Grid.SetColumn(SubscriptionsMetaLayoutPanel, 0);
+            Grid.SetColumn(SubscriptionsMetaThemePanel, 0);
+            Grid.SetRow(SubscriptionsMetaLayoutPanel, 1);
+            Grid.SetRow(SubscriptionsMetaThemePanel, 2);
+
+            OilMetricsColumn2.Width = new GridLength(0);
+            OilMetricsColumn3.Width = new GridLength(0);
+            OilMetricsRow2.Height = GridLength.Auto;
+            OilMetricsRow3.Height = GridLength.Auto;
+            Grid.SetColumn(OilLastUpdatedCard, 0);
+            Grid.SetColumn(OilHistoryCountCard, 0);
+            Grid.SetRow(OilLastUpdatedCard, 1);
+            Grid.SetRow(OilHistoryCountCard, 2);
+        }
+        else
+        {
+            SubscriptionsMetaColumn2.Width = GridLength.Auto;
+            SubscriptionsMetaColumn3.Width = GridLength.Auto;
+            SubscriptionsMetaRow2.Height = new GridLength(0);
+            SubscriptionsMetaRow3.Height = new GridLength(0);
+            Grid.SetColumn(SubscriptionsMetaLayoutPanel, 1);
+            Grid.SetColumn(SubscriptionsMetaThemePanel, 2);
+            Grid.SetRow(SubscriptionsMetaLayoutPanel, 0);
+            Grid.SetRow(SubscriptionsMetaThemePanel, 0);
+
+            OilMetricsColumn2.Width = new GridLength(1, GridUnitType.Star);
+            OilMetricsColumn3.Width = new GridLength(1, GridUnitType.Star);
+            OilMetricsRow2.Height = new GridLength(0);
+            OilMetricsRow3.Height = new GridLength(0);
+            Grid.SetColumn(OilLastUpdatedCard, 1);
+            Grid.SetColumn(OilHistoryCountCard, 2);
+            Grid.SetRow(OilLastUpdatedCard, 0);
+            Grid.SetRow(OilHistoryCountCard, 0);
+        }
+    }
 
     private void OnExpiringNotificationsChanged(List<string> messages)
     {

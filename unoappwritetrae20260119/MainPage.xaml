@@ -51,28 +51,37 @@
                     CornerRadius="270"/>
         </Grid>
 
-        <Grid MaxWidth="1380"
+        <Grid x:Name="MainShellGrid"
+              MaxWidth="1380"
               Margin="28"
               HorizontalAlignment="Center"
               VerticalAlignment="Stretch"
-              ColumnSpacing="24">
+              ColumnSpacing="24"
+              RowSpacing="24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition x:Name="MainShellBottomRow" Height="0"/>
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="260"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition x:Name="SidebarColumn" Width="260"/>
+                <ColumnDefinition x:Name="ContentColumn" Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0"
-                    Padding="22"
-                    Background="{StaticResource HeroPanelBrush}"
-                    BorderBrush="{StaticResource PanelStrongBrush}"
-                    BorderThickness="1"
-                    CornerRadius="30">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="Auto"/>
-                    </Grid.RowDefinitions>
+                <Border x:Name="SidebarPanel"
+                        Grid.Column="0"
+                        Grid.Row="0"
+                        Grid.RowSpan="2"
+                        Padding="22"
+                        Background="{StaticResource HeroPanelBrush}"
+                        BorderBrush="{StaticResource PanelStrongBrush}"
+                        BorderThickness="1"
+                        CornerRadius="30">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
 
                     <StackPanel Spacing="18">
                         <StackPanel Spacing="6">
@@ -203,12 +212,15 @@
                         </StackPanel>
                     </Border>
                 </Grid>
-            </Border>
+                </Border>
 
-            <Grid Grid.Column="1">
-                <Border x:Name="SubscriptionsSection"
-                        Background="Transparent">
-                    <Grid>
+                <Grid x:Name="ContentHostGrid"
+                      Grid.Column="1"
+                      Grid.Row="0"
+                      Grid.RowSpan="2">
+                    <Border x:Name="SubscriptionsSection"
+                            Background="Transparent">
+                        <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
@@ -222,10 +234,16 @@
                                 BorderBrush="{StaticResource PanelStrongBrush}"
                                 BorderThickness="1"
                                 CornerRadius="30">
-                            <Grid ColumnSpacing="28">
+                            <Grid x:Name="SubscriptionsHeroGrid"
+                                  ColumnSpacing="28"
+                                  RowSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition x:Name="SubscriptionsHeroBottomRow" Height="0"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition x:Name="SubscriptionsHeroActionsColumn" Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Spacing="18">
@@ -247,11 +265,18 @@
                                         </Border>
                                     </StackPanel>
 
-                                    <Grid ColumnSpacing="28">
+                                    <Grid x:Name="SubscriptionsMetaGrid"
+                                          ColumnSpacing="28"
+                                          RowSpacing="10">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition x:Name="SubscriptionsMetaRow2" Height="0"/>
+                                            <RowDefinition x:Name="SubscriptionsMetaRow3" Height="0"/>
+                                        </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
-                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition x:Name="SubscriptionsMetaColumn2" Width="Auto"/>
+                                            <ColumnDefinition x:Name="SubscriptionsMetaColumn3" Width="Auto"/>
                                         </Grid.ColumnDefinitions>
 
                                         <StackPanel Spacing="4">
@@ -262,20 +287,24 @@
                                             </StackPanel>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="1" Spacing="4">
+                                        <StackPanel x:Name="SubscriptionsMetaLayoutPanel"
+                                                    Grid.Column="1"
+                                                    Spacing="4">
                                             <TextBlock Text="Layout" Style="{StaticResource HeaderLabelStyle}"/>
                                             <TextBlock Text="Modern Grid" Style="{StaticResource HeaderValueStyle}"/>
                                         </StackPanel>
 
-                                        <StackPanel Grid.Column="2" Spacing="4">
+                                        <StackPanel x:Name="SubscriptionsMetaThemePanel"
+                                                    Grid.Column="2"
+                                                    Spacing="4">
                                             <TextBlock Text="Theme" Style="{StaticResource HeaderLabelStyle}"/>
                                             <TextBlock Text="Tech Surface" Style="{StaticResource HeaderValueStyle}"/>
                                         </StackPanel>
                                     </Grid>
                                 </StackPanel>
 
-                                <Border Grid.Column="1"
-                                        MinWidth="360"
+                                <Border x:Name="SubscriptionsActionsCard"
+                                        Grid.Column="1"
                                         Padding="22"
                                         Background="{StaticResource PanelSurfaceBrush}"
                                         BorderBrush="{StaticResource PanelStrongBrush}"
@@ -478,12 +507,12 @@
                                               VerticalAlignment="Center"/>
                             </Grid>
                         </Border>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
 
-                <Border x:Name="OilMonitoringSection"
-                        Visibility="Collapsed">
-                    <Grid>
+                    <Border x:Name="OilMonitoringSection"
+                            Visibility="Collapsed">
+                        <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="*"/>
@@ -496,10 +525,16 @@
                                 BorderBrush="{StaticResource PanelStrongBrush}"
                                 BorderThickness="1"
                                 CornerRadius="30">
-                            <Grid ColumnSpacing="28">
+                            <Grid x:Name="OilHeroGrid"
+                                  ColumnSpacing="28"
+                                  RowSpacing="16">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition x:Name="OilHeroBottomRow" Height="0"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition x:Name="OilHeroActionsColumn" Width="Auto"/>
                                 </Grid.ColumnDefinitions>
 
                                 <StackPanel Spacing="12">
@@ -517,9 +552,9 @@
                                                Foreground="{StaticResource TextSecondaryBrush}"/>
                                 </StackPanel>
 
-                                <StackPanel Grid.Column="1"
-                                            Spacing="12"
-                                            MinWidth="230">
+                                <StackPanel x:Name="OilHeroActionsPanel"
+                                            Grid.Column="1"
+                                            Spacing="12">
                                     <Button Content="立即抓取"
                                             Click="FetchOilMonitoringButton_Click"
                                             Style="{StaticResource PrimaryActionButtonStyle}"/>
@@ -530,11 +565,16 @@
                             </Grid>
                         </Border>
 
-                        <Grid Grid.Row="1"
+                        <Grid x:Name="OilBodyGrid"
+                              Grid.Row="1"
                               ColumnSpacing="18">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition x:Name="OilBodyBottomRow" Height="0"/>
+                            </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="2*"/>
-                                <ColumnDefinition Width="1.1*"/>
+                                <ColumnDefinition x:Name="OilChartColumn" Width="2*"/>
+                                <ColumnDefinition x:Name="OilSummaryColumn" Width="1.1*"/>
                             </Grid.ColumnDefinitions>
 
                             <Border Grid.Column="0"
@@ -544,11 +584,18 @@
                                     BorderThickness="1"
                                     CornerRadius="30">
                                 <StackPanel Spacing="18">
-                                    <Grid ColumnSpacing="14">
+                                    <Grid x:Name="OilMetricsGrid"
+                                          ColumnSpacing="14"
+                                          RowSpacing="12">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition x:Name="OilMetricsRow2" Height="0"/>
+                                            <RowDefinition x:Name="OilMetricsRow3" Height="0"/>
+                                        </Grid.RowDefinitions>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition x:Name="OilMetricsColumn2" Width="*"/>
+                                            <ColumnDefinition x:Name="OilMetricsColumn3" Width="*"/>
                                         </Grid.ColumnDefinitions>
 
                                         <Border Background="{StaticResource PanelMutedBrush}"
@@ -567,7 +614,8 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <Border Grid.Column="1"
+                                        <Border x:Name="OilLastUpdatedCard"
+                                                Grid.Column="1"
                                                 Background="{StaticResource PanelMutedBrush}"
                                                 BorderBrush="{StaticResource PanelStrongBrush}"
                                                 BorderThickness="1"
@@ -584,7 +632,8 @@
                                             </StackPanel>
                                         </Border>
 
-                                        <Border Grid.Column="2"
+                                        <Border x:Name="OilHistoryCountCard"
+                                                Grid.Column="2"
                                                 Background="{StaticResource PanelMutedBrush}"
                                                 BorderBrush="{StaticResource PanelStrongBrush}"
                                                 BorderThickness="1"
@@ -620,7 +669,8 @@
                                 </StackPanel>
                             </Border>
 
-                            <Border Grid.Column="1"
+                            <Border x:Name="OilSummaryCard"
+                                    Grid.Column="1"
                                     Padding="24"
                                     Background="{StaticResource PanelSurfaceBrush}"
                                     BorderBrush="{StaticResource PanelStrongBrush}"
@@ -670,9 +720,9 @@
                                 </StackPanel>
                             </Border>
                         </Grid>
-                    </Grid>
-                </Border>
+                        </Grid>
+                    </Border>
+                </Grid>
             </Grid>
-        </Grid>
     </Grid>
 </Page>
