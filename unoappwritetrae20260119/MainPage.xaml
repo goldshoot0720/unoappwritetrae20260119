@@ -51,21 +51,26 @@
                     CornerRadius="270"/>
         </Grid>
 
-        <Grid x:Name="MainShellGrid"
-              MaxWidth="1380"
-              Margin="28"
-              HorizontalAlignment="Center"
-              VerticalAlignment="Stretch"
-              ColumnSpacing="24"
-              RowSpacing="24">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition x:Name="MainShellBottomRow" Height="0"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="SidebarColumn" Width="260"/>
-                <ColumnDefinition x:Name="ContentColumn" Width="*"/>
-            </Grid.ColumnDefinitions>
+        <ScrollViewer HorizontalScrollBarVisibility="Disabled"
+                      HorizontalScrollMode="Disabled"
+                      VerticalScrollBarVisibility="Auto"
+                      VerticalScrollMode="Auto"
+                      ZoomMode="Disabled">
+            <Grid x:Name="MainShellGrid"
+                  MaxWidth="1380"
+                  Margin="28"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Stretch"
+                  ColumnSpacing="24"
+                  RowSpacing="24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition x:Name="MainShellBottomRow" Height="0"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition x:Name="SidebarColumn" Width="260"/>
+                    <ColumnDefinition x:Name="ContentColumn" Width="*"/>
+                </Grid.ColumnDefinitions>
 
                 <Border x:Name="SidebarPanel"
                         Grid.Column="0"
@@ -724,5 +729,6 @@
                     </Border>
                 </Grid>
             </Grid>
+        </ScrollViewer>
     </Grid>
 </Page>
