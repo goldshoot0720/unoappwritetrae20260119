@@ -4,11 +4,27 @@ using Uno.Resizetizer;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace unoappwritetrae20260119;
 
 public partial class App : Application
 {
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_getClass")]
+    private static extern IntPtr objc_getClass(string name);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "sel_registerName")]
+    private static extern IntPtr sel_registerName(string name);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern IntPtr objc_msgSend_IntPtr(IntPtr receiver, IntPtr selector);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern void objc_msgSend_Void_IntPtr(IntPtr receiver, IntPtr selector, IntPtr arg1);
+
+    [DllImport("/usr/lib/libobjc.A.dylib", EntryPoint = "objc_msgSend")]
+    private static extern void objc_msgSend_Void_Bool(IntPtr receiver, IntPtr selector, bool arg1);
+
     /// <summary>
     /// Initializes the singleton application object. This is the first line of authored code
     /// executed, and as such is the logical equivalent of main() or WinMain().
@@ -54,14 +70,19 @@ public partial class App : Application
         MainWindow.Activate();
         
         // Handle autostart argument
-        if (OperatingSystem.IsWindows())
+        var commandLineArgs = Environment.GetCommandLineArgs();
+        if (commandLineArgs.Contains("--autostart"))
         {
-            var commandLineArgs = Environment.GetCommandLineArgs();
-            if (commandLineArgs.Contains("--autostart"))
-            {
-                HideWindow();
-            }
+            _ = HideWindowOnAutostartAsync();
         }
+    }
+
+    private async Task HideWindowOnAutostartAsync()
+    {
+        // Give the desktop host a brief moment to finish creating the native window
+        // before we send it to the background.
+        await Task.Delay(300);
+        HideWindow();
     }
     
     public void HideWindow()
@@ -76,6 +97,8 @@ public partial class App : Application
                 var appWindow = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(windowId);
                 
                 appWindow.Hide();
+#elif __MACOS__
+                HideMacApplication();
 #else
                 MainWindow?.Close();
 #endif
@@ -111,6 +134,9 @@ public partial class App : Application
                 
                 // Bring to front
                 MainWindow.Activate();
+#elif __MACOS__
+                ShowMacApplication();
+                MainWindow?.Activate();
 #else
                 MainWindow?.Activate();
 #endif
@@ -120,6 +146,58 @@ public partial class App : Application
                 System.Diagnostics.Debug.WriteLine($"Failed to show: {ex.Message}");
             }
         });
+    }
+
+    private static void HideMacApplication()
+    {
+        try
+        {
+            var app = GetSharedMacApplication();
+            if (app == IntPtr.Zero)
+            {
+                return;
+            }
+
+            var hideSelector = sel_registerName("hide:");
+            objc_msgSend_Void_IntPtr(app, hideSelector, IntPtr.Zero);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to hide macOS app: {ex.Message}");
+        }
+    }
+
+    private static void ShowMacApplication()
+    {
+        try
+        {
+            var app = GetSharedMacApplication();
+            if (app == IntPtr.Zero)
+            {
+                return;
+            }
+
+            var unhideSelector = sel_registerName("unhide:");
+            var activateSelector = sel_registerName("activateIgnoringOtherApps:");
+            objc_msgSend_Void_IntPtr(app, unhideSelector, IntPtr.Zero);
+            objc_msgSend_Void_Bool(app, activateSelector, true);
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Failed to show macOS app: {ex.Message}");
+        }
+    }
+
+    private static IntPtr GetSharedMacApplication()
+    {
+        var nsApplicationClass = objc_getClass("NSApplication");
+        if (nsApplicationClass == IntPtr.Zero)
+        {
+            return IntPtr.Zero;
+        }
+
+        var sharedApplicationSelector = sel_registerName("sharedApplication");
+        return objc_msgSend_IntPtr(nsApplicationClass, sharedApplicationSelector);
     }
 
     /// <summary>
