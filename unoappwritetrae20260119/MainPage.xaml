@@ -197,6 +197,318 @@
                                 </Grid>
                             </Border>
                         </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="BatteryStatus"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="BatteryStatusNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="電"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="電池選單"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="充電狀態與估算"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="UsDebt"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="UsDebtNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="US"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="US Debt"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="美國國債資料"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="FengTools"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="FengToolsNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="價"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="鋒兄工具"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="比價工具入口"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="BankStats"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="BankStatsNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="銀"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="銀行統計"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="帳戶與存款彙整"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="FoodManagement"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="FoodManagementNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="食"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="食物管理"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="品項、價格與保存"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="FengNotes"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="FengNotesNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="記"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="常用筆記"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="文章與連結"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="LotteryReason"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="LotteryReasonNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource PanelMutedBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="38"
+                                                   Foreground="{StaticResource AccentStrongBrush}"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="最瞎結婚理由"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="台彩組合比對"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
+
+                        <Button Click="OnReferenceFeatureNavClick"
+                                Tag="FengCommon"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Padding="0">
+                            <Border x:Name="FengCommonNavItem"
+                                    Background="Transparent"
+                                    BorderBrush="{StaticResource AccentSoftBrush}"
+                                    BorderThickness="0"
+                                    CornerRadius="18"
+                                    Padding="14,12">
+                                <Grid ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Border Width="34"
+                                            Height="34"
+                                            Background="{StaticResource TextPrimaryBrush}"
+                                            CornerRadius="17">
+                                        <TextBlock Text="常"
+                                                   Foreground="White"
+                                                   FontWeight="Bold"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+                                    </Border>
+                                    <StackPanel Grid.Column="1" Spacing="2">
+                                        <TextBlock Text="常用資料"
+                                                   FontSize="15"
+                                                   FontWeight="SemiBold"
+                                                   Foreground="{StaticResource TextPrimaryBrush}"/>
+                                        <TextBlock Text="帳號與共用資訊"
+                                                   FontSize="12"
+                                                   Foreground="{StaticResource TextSecondaryBrush}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+                        </Button>
                     </StackPanel>
 
                     <Border Grid.Row="2"
@@ -725,6 +1037,116 @@
                                 </StackPanel>
                             </Border>
                         </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border x:Name="ReferenceFeatureSection"
+                            Visibility="Collapsed">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <Border Grid.Row="0"
+                                    Padding="28"
+                                    Margin="0,0,0,18"
+                                    Background="{StaticResource HeroPanelBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="30">
+                                <StackPanel Spacing="12">
+                                    <TextBlock x:Name="ReferenceFeatureEyebrowText"
+                                               Text="Reference"
+                                               FontSize="13"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource AccentStrongBrush}"/>
+                                    <TextBlock x:Name="ReferenceFeatureTitleText"
+                                               Text="功能入口"
+                                               FontSize="38"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock x:Name="ReferenceFeatureDescriptionText"
+                                               Text="此功能已依參考 Android 專案加入選單，後續可在 Uno 版接上完整資料與畫面。"
+                                               FontSize="15"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Row="1"
+                                    Padding="24"
+                                    Background="{StaticResource PanelSurfaceBrush}"
+                                    BorderBrush="{StaticResource PanelStrongBrush}"
+                                    BorderThickness="1"
+                                    CornerRadius="30">
+                                <StackPanel Spacing="16">
+                                    <TextBlock Text="已加入主選單"
+                                               FontSize="24"
+                                               FontWeight="SemiBold"
+                                               Foreground="{StaticResource TextPrimaryBrush}"/>
+                                    <TextBlock x:Name="ReferenceFeatureStatusText"
+                                               Text="目前是功能入口頁，保留參考專案的名稱與用途說明。"
+                                               FontSize="14"
+                                               Foreground="{StaticResource TextSecondaryBrush}"
+                                               TextWrapping="Wrap"/>
+                                    <Grid ColumnSpacing="14" RowSpacing="14">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition Height="Auto"/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+
+                                        <Border Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="20"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="來源"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock Text="appwriteandroidtrae"
+                                                           Style="{StaticResource HeaderValueStyle}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Column="1"
+                                                Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="20"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="狀態"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock Text="選單入口已建立"
+                                                           Style="{StaticResource HeaderValueStyle}"/>
+                                            </StackPanel>
+                                        </Border>
+
+                                        <Border Grid.Row="1"
+                                                Grid.ColumnSpan="2"
+                                                Background="{StaticResource PanelMutedBrush}"
+                                                BorderBrush="{StaticResource PanelStrongBrush}"
+                                                BorderThickness="1"
+                                                CornerRadius="20"
+                                                Padding="16">
+                                            <StackPanel Spacing="6">
+                                                <TextBlock Text="下一步"
+                                                           Style="{StaticResource HeaderLabelStyle}"/>
+                                                <TextBlock Text="若需要完整功能，可逐一移植 Android 專案中的資料服務、畫面欄位與排程邏輯。"
+                                                           FontSize="16"
+                                                           FontWeight="SemiBold"
+                                                           Foreground="{StaticResource TextPrimaryBrush}"
+                                                           TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                        </Border>
+                                    </Grid>
+                                </StackPanel>
+                            </Border>
                         </Grid>
                     </Border>
                 </Grid>

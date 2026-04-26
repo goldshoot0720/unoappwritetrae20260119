@@ -17,6 +17,20 @@ namespace unoappwritetrae20260119;
 
 public sealed partial class MainPage : Page
 {
+    private enum AppSection
+    {
+        Subscriptions,
+        OilMonitoring,
+        BatteryStatus,
+        UsDebt,
+        FengTools,
+        BankStats,
+        FoodManagement,
+        FengNotes,
+        LotteryReason,
+        FengCommon
+    }
+
     private readonly AppwriteService _appwriteService;
     private readonly StartupService _startupService;
     private readonly NotificationService _notificationService;
@@ -60,9 +74,13 @@ public sealed partial class MainPage : Page
 
         _notificationService.ExpiringNotificationsChanged += OnExpiringNotificationsChanged;
 
-        if (OperatingSystem.IsWindows())
+        if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
         {
             _notificationService.StartDailyScheduler(_appwriteService);
+        }
+
+        if (OperatingSystem.IsWindows())
+        {
             _oqdMonitorService.StartDailyScheduler(() =>
             {
                 DispatcherQueue.TryEnqueue(() => _ = LoadOilMonitoringAsync(fetchLatest: false));
@@ -79,7 +97,7 @@ public sealed partial class MainPage : Page
     {
         ApplyResponsiveLayout(ActualWidth);
 
-        if (OperatingSystem.IsWindows())
+        if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
         {
             var isStartup = _startupService.IsStartupEnabled();
             StartupSwitch.IsOn = isStartup;
@@ -99,30 +117,99 @@ public sealed partial class MainPage : Page
             StartupSwitch.IsEnabled = false;
         }
 
-        SetActiveSection(isOilMonitoring: false);
+        SetActiveSection(AppSection.Subscriptions);
         await LoadSubscriptionsAsync();
         await LoadOilMonitoringAsync(fetchLatest: true);
     }
 
-    private void SetActiveSection(bool isOilMonitoring)
+    private void SetActiveSection(AppSection section)
     {
-        SubscriptionsSection.Visibility = isOilMonitoring ? Visibility.Collapsed : Visibility.Visible;
+        var isSubscriptions = section == AppSection.Subscriptions;
+        var isOilMonitoring = section == AppSection.OilMonitoring;
+
+        SubscriptionsSection.Visibility = isSubscriptions ? Visibility.Visible : Visibility.Collapsed;
         OilMonitoringSection.Visibility = isOilMonitoring ? Visibility.Visible : Visibility.Collapsed;
+        ReferenceFeatureSection.Visibility = isSubscriptions || isOilMonitoring ? Visibility.Collapsed : Visibility.Visible;
 
-        SubscriptionNavItem.Background = isOilMonitoring
-            ? new SolidColorBrush(Microsoft.UI.Colors.Transparent)
-            : (Brush)Application.Current.Resources["PanelSurfaceBrush"];
-        SubscriptionNavItem.BorderThickness = isOilMonitoring ? new Thickness(0) : new Thickness(1);
+        ResetNavItem(SubscriptionNavItem);
+        ResetNavItem(OilMonitoringNavItem);
+        ResetNavItem(BatteryStatusNavItem);
+        ResetNavItem(UsDebtNavItem);
+        ResetNavItem(FengToolsNavItem);
+        ResetNavItem(BankStatsNavItem);
+        ResetNavItem(FoodManagementNavItem);
+        ResetNavItem(FengNotesNavItem);
+        ResetNavItem(LotteryReasonNavItem);
+        ResetNavItem(FengCommonNavItem);
 
-        OilMonitoringNavItem.Background = isOilMonitoring
-            ? (Brush)Application.Current.Resources["AccentPanelBrush"]
-            : new SolidColorBrush(Microsoft.UI.Colors.Transparent);
-        OilMonitoringNavItem.BorderThickness = isOilMonitoring ? new Thickness(1) : new Thickness(0);
+        var activeNavItem = section switch
+        {
+            AppSection.Subscriptions => SubscriptionNavItem,
+            AppSection.OilMonitoring => OilMonitoringNavItem,
+            AppSection.BatteryStatus => BatteryStatusNavItem,
+            AppSection.UsDebt => UsDebtNavItem,
+            AppSection.FengTools => FengToolsNavItem,
+            AppSection.BankStats => BankStatsNavItem,
+            AppSection.FoodManagement => FoodManagementNavItem,
+            AppSection.FengNotes => FengNotesNavItem,
+            AppSection.LotteryReason => LotteryReasonNavItem,
+            AppSection.FengCommon => FengCommonNavItem,
+            _ => SubscriptionNavItem
+        };
+
+        SetActiveNavItem(activeNavItem);
+
+        if (!isSubscriptions && !isOilMonitoring)
+        {
+            UpdateReferenceFeature(section);
+        }
     }
 
-    private void OnSubscriptionsNavClick(object sender, RoutedEventArgs e) => SetActiveSection(isOilMonitoring: false);
+    private void ResetNavItem(Border item)
+    {
+        item.Background = new SolidColorBrush(Microsoft.UI.Colors.Transparent);
+        item.BorderThickness = new Thickness(0);
+    }
 
-    private void OnOilMonitoringNavClick(object sender, RoutedEventArgs e) => SetActiveSection(isOilMonitoring: true);
+    private void SetActiveNavItem(Border item)
+    {
+        item.Background = (Brush)Application.Current.Resources["PanelSurfaceBrush"];
+        item.BorderBrush = (Brush)Application.Current.Resources["PanelStrongBrush"];
+        item.BorderThickness = new Thickness(1);
+    }
+
+    private void UpdateReferenceFeature(AppSection section)
+    {
+        var (eyebrow, title, description) = section switch
+        {
+            AppSection.BatteryStatus => ("Battery", "電池選單", "參考 Android 版的電池選單，用來顯示上次充滿電時間與剩餘電量估算。"),
+            AppSection.UsDebt => ("US Debt", "US Debt", "參考 Android 版的美國國債入口，用來查看最新美國國債資料與更新時間。"),
+            AppSection.FengTools => ("Fengbro Tools", "鋒兄工具", "參考 Android 版的工具入口，集中鋒兄比價與手機比價小工具。"),
+            AppSection.BankStats => ("Banking", "銀行統計", "參考 Android 版的銀行統計，用來彙整銀行帳戶、存款與常用資料。"),
+            AppSection.FoodManagement => ("Food", "食物管理", "參考 Android 版的食物管理，用來管理食物紀錄、價格與保存期限。"),
+            AppSection.FengNotes => ("Notes", "常用筆記", "參考 Android 版的常用筆記，用來整理文章、連結與備註。"),
+            AppSection.LotteryReason => ("Lottery", "最瞎結婚理由", "參考 Android 版的台彩逐期號碼與指定組合比對入口。"),
+            AppSection.FengCommon => ("Common", "常用資料", "參考 Android 版的常用資料，用來查看常用帳號與共用資訊。"),
+            _ => ("Reference", "功能入口", "此功能已依參考 Android 專案加入選單，後續可在 Uno 版接上完整資料與畫面。")
+        };
+
+        ReferenceFeatureEyebrowText.Text = eyebrow;
+        ReferenceFeatureTitleText.Text = title;
+        ReferenceFeatureDescriptionText.Text = description;
+        ReferenceFeatureStatusText.Text = $"{title} 已加入 Uno 版主選單；目前保留入口與用途說明。";
+    }
+
+    private void OnSubscriptionsNavClick(object sender, RoutedEventArgs e) => SetActiveSection(AppSection.Subscriptions);
+
+    private void OnOilMonitoringNavClick(object sender, RoutedEventArgs e) => SetActiveSection(AppSection.OilMonitoring);
+
+    private void OnReferenceFeatureNavClick(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button { Tag: string tag } && Enum.TryParse<AppSection>(tag, out var section))
+        {
+            SetActiveSection(section);
+        }
+    }
 
     private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
     {
@@ -224,6 +311,7 @@ public sealed partial class MainPage : Page
 
             NotificationList.ItemsSource = messages;
             NotificationPanel.Visibility = Visibility.Visible;
+            RestoreWindow();
         });
     }
 
@@ -242,7 +330,7 @@ public sealed partial class MainPage : Page
 
     private void StartupSwitch_Toggled(object sender, RoutedEventArgs e)
     {
-        if (OperatingSystem.IsWindows() && sender is ToggleSwitch toggle)
+        if ((OperatingSystem.IsWindows() || OperatingSystem.IsMacOS()) && sender is ToggleSwitch toggle)
         {
             _startupService.SetStartup(toggle.IsOn);
         }
@@ -263,7 +351,7 @@ public sealed partial class MainPage : Page
 
     private void TestNotification_Click(object sender, RoutedEventArgs e)
     {
-        if (OperatingSystem.IsWindows())
+        if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
         {
             var dummySub = new Subscription
             {
