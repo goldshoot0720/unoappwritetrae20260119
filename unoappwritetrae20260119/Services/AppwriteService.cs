@@ -29,7 +29,7 @@ namespace unoappwritetrae20260119.Services
             var projectId = GetSetting("NEXT_PUBLIC_APPWRITE_PROJECT_ID", DefaultProjectId);
             _databaseId = GetSetting("APPWRITE_DATABASE_ID", DefaultDatabaseId);
             _collectionId = GetSetting("APPWRITE_COLLECTION_ID", DefaultCollectionId);
-            var apiKey = Environment.GetEnvironmentVariable("APPWRITE_API_KEY");
+            var apiKey = GetSetting("APPWRITE_API_KEY", Environment.GetEnvironmentVariable("NEXT_PUBLIC_APPWRITE_API_KEY") ?? string.Empty);
 
             _client = new Client()
                 .SetEndpoint(endpoint)
