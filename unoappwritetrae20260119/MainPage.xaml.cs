@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
@@ -35,6 +36,7 @@ public sealed partial class MainPage : Page
     private readonly StartupService _startupService;
     private readonly NotificationService _notificationService;
     private readonly OqdMonitorService _oqdMonitorService;
+    private DispatcherQueueTimer? _sleepWarningTimer;
     private const double CompactLayoutBreakpoint = 1180;
     private const double NarrowLayoutBreakpoint = 860;
     private bool _sortByName = true;
@@ -96,6 +98,8 @@ public sealed partial class MainPage : Page
     private async void MainPage_Loaded(object sender, RoutedEventArgs e)
     {
         ApplyResponsiveLayout(ActualWidth);
+        StartSleepWarningTimer();
+        UpdateSleepWarning();
 
         if (OperatingSystem.IsWindows() || OperatingSystem.IsMacOS())
         {
@@ -120,6 +124,46 @@ public sealed partial class MainPage : Page
         SetActiveSection(AppSection.Subscriptions);
         await LoadSubscriptionsAsync();
         await LoadOilMonitoringAsync(fetchLatest: true);
+    }
+
+    private void StartSleepWarningTimer()
+    {
+        if (_sleepWarningTimer is not null)
+        {
+            return;
+        }
+
+        _sleepWarningTimer = DispatcherQueue.CreateTimer();
+        _sleepWarningTimer.Interval = TimeSpan.FromMinutes(1);
+        _sleepWarningTimer.Tick += (_, _) => UpdateSleepWarning();
+        _sleepWarningTimer.Start();
+    }
+
+    private void UpdateSleepWarning()
+    {
+        var hour = DateTime.Now.Hour;
+
+        if (hour is >= 0 and <= 2)
+        {
+            SleepWarningPanel.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 255, 232, 163));
+            SleepWarningPanel.BorderBrush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 229, 184, 64));
+            SleepWarningText.Foreground = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 122, 82, 0));
+            SleepWarningText.Text = "請入睡";
+            SleepWarningPanel.Visibility = Visibility.Visible;
+            return;
+        }
+
+        if (hour is >= 3 and <= 6)
+        {
+            SleepWarningPanel.Background = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 255, 218, 218));
+            SleepWarningPanel.BorderBrush = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 220, 64, 64));
+            SleepWarningText.Foreground = new SolidColorBrush(Microsoft.UI.ColorHelper.FromArgb(255, 142, 21, 21));
+            SleepWarningText.Text = "請入睡";
+            SleepWarningPanel.Visibility = Visibility.Visible;
+            return;
+        }
+
+        SleepWarningPanel.Visibility = Visibility.Collapsed;
     }
 
     private void SetActiveSection(AppSection section)
