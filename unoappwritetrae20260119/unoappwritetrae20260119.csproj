@@ -3,7 +3,7 @@
     <TargetFrameworks>net9.0-desktop</TargetFrameworks>
     <TargetFrameworks Condition=" $([MSBuild]::IsOSPlatform('windows')) ">$(TargetFrameworks);net9.0-windows10.0.19041.0</TargetFrameworks>
     <WindowsPackageType Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">None</WindowsPackageType>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <UnoSingleProject>true</UnoSingleProject>
 
     <!-- Display name -->
