@@ -43,11 +43,10 @@ namespace unoappwritetrae20260119.Services
 
                 if (enable)
                 {
-                    // Get the path to the executable
-                    var location = Environment.ProcessPath;
-                    if (!string.IsNullOrEmpty(location))
+                    var startupCommand = GetCurrentStartupCommand();
+                    if (!string.IsNullOrEmpty(startupCommand))
                     {
-                        key.SetValue(AppName, $"\"{location}\" --autostart");
+                        key.SetValue(AppName, startupCommand);
                     }
                 }
                 else
@@ -69,12 +68,23 @@ namespace unoappwritetrae20260119.Services
              try
             {
                 using var key = Registry.CurrentUser.OpenSubKey(RunKeyPath, false);
-                return key?.GetValue(AppName) != null;
+                var registeredCommand = key?.GetValue(AppName)?.ToString();
+                var currentCommand = GetCurrentStartupCommand();
+
+                return !string.IsNullOrWhiteSpace(registeredCommand)
+                    && !string.IsNullOrWhiteSpace(currentCommand)
+                    && string.Equals(registeredCommand, currentCommand, StringComparison.OrdinalIgnoreCase);
             }
              catch
              {
                  return false;
              }
+        }
+
+        private static string? GetCurrentStartupCommand()
+        {
+            var location = Environment.ProcessPath;
+            return string.IsNullOrWhiteSpace(location) ? null : $"\"{location}\" --autostart";
         }
 
         [SupportedOSPlatform("windows")]

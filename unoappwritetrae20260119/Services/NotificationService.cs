@@ -14,6 +14,7 @@ namespace unoappwritetrae20260119.Services
     {
         private Timer? _timer;
         private AppwriteService? _appwriteService;
+        private bool _schedulerStarted;
 
         /// <summary>
         /// Event fired when expiring subscriptions are detected, for in-window display.
@@ -23,6 +24,13 @@ namespace unoappwritetrae20260119.Services
         public void StartDailyScheduler(AppwriteService appwriteService)
         {
             _appwriteService = appwriteService;
+
+            if (_schedulerStarted)
+            {
+                return;
+            }
+
+            _schedulerStarted = true;
             ScheduleNextCheck();
         }
 
