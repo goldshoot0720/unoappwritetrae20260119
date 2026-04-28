@@ -679,7 +679,7 @@
                                                       OnContent="開啟"
                                                       Toggled="StartupSwitch_Toggled"
                                                       Style="{StaticResource GlassToggleStyle}"/>
-                                        <Button Content="按日期排序"
+                                        <Button Content="按名稱排序"
                                                 x:Name="SortByNameButton"
                                                 Click="SortByNameButton_Click"
                                                 Style="{StaticResource ActionButtonStyle}"/>

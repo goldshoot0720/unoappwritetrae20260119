@@ -1,12 +1,12 @@
 using System;
-using unoappwritetrae20260119.Models;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
+using System.Security;
 using System.Threading;
 using System.Threading.Tasks;
-#if WINDOWS
-using Microsoft.Toolkit.Uwp.Notifications;
-#endif
+using unoappwritetrae20260119.Models;
 
 namespace unoappwritetrae20260119.Services
 {
@@ -15,15 +15,16 @@ namespace unoappwritetrae20260119.Services
         private Timer? _timer;
         private AppwriteService? _appwriteService;
         private bool _schedulerStarted;
+        private bool _notificationsRegistered;
+        private object? _notificationManager;
+        private Type? _appNotificationType;
 
-        /// <summary>
-        /// Event fired when expiring subscriptions are detected, for in-window display.
-        /// </summary>
         public event Action<List<string>>? ExpiringNotificationsChanged;
 
         public void StartDailyScheduler(AppwriteService appwriteService)
         {
             _appwriteService = appwriteService;
+            TryEnsureWindowsNotificationsRegistered();
 
             if (_schedulerStarted)
             {
@@ -39,10 +40,8 @@ namespace unoappwritetrae20260119.Services
             if (!OperatingSystem.IsWindows()) return;
 
             var now = DateTime.Now;
-            // Target 6:00 AM
             var next6AM = now.Date.AddHours(6);
-            
-            // If it's already past 6 AM today, schedule for tomorrow 6 AM
+
             if (next6AM <= now)
             {
                 next6AM = next6AM.AddDays(1);
@@ -51,14 +50,11 @@ namespace unoappwritetrae20260119.Services
             var delay = next6AM - now;
             Debug.WriteLine($"Next notification check scheduled at: {next6AM} (in {delay.TotalHours:F2} hours)");
 
-            // Dispose previous timer if any
             _timer?.Dispose();
 
-            // Schedule single-shot timer
-            _timer = new Timer(async _ => 
+            _timer = new Timer(async _ =>
             {
                 await CheckAndNotifyAsync();
-                // Reschedule for the next day
                 ScheduleNextCheck();
             }, null, delay, Timeout.InfiniteTimeSpan);
         }
@@ -67,7 +63,7 @@ namespace unoappwritetrae20260119.Services
         {
             if (_appwriteService == null) return;
 
-            try 
+            try
             {
                 var subscriptions = await _appwriteService.GetSubscriptionsAsync();
                 CheckAndNotify(subscriptions);
@@ -78,81 +74,122 @@ namespace unoappwritetrae20260119.Services
             }
         }
 
-        /// <summary>
-        /// Check subscriptions and show both toast and in-window notifications.
-        /// </summary>
         public void CheckAndNotify(List<Subscription> subscriptions)
         {
-            // Only run on Windows
             if (!OperatingSystem.IsWindows()) return;
 
             var today = DateTime.Now.Date;
             var threeDaysLater = today.AddDays(3);
-
             var messages = new List<string>();
 
             foreach (var sub in subscriptions)
             {
-                if (DateTime.TryParse(sub.NextDate, out DateTime nextDate))
+                if (DateTime.TryParse(sub.NextDate, out var nextDate) &&
+                    nextDate.Date >= today &&
+                    nextDate.Date <= threeDaysLater)
                 {
-                    // Check if date is within range [Today, Today+3]
-                    if (nextDate.Date >= today && nextDate.Date <= threeDaysLater)
-                    {
-                        ShowNotification(sub, nextDate);
+                    ShowNotification(sub, nextDate);
 
-                        // Build in-window message
-                        var daysLeft = (nextDate.Date - today).Days;
-                        var daysText = daysLeft == 0 ? "今天到期" :
-                                       daysLeft == 1 ? "明天到期" :
-                                       $"{daysLeft} 天後到期";
-                        var accountPart = string.IsNullOrWhiteSpace(sub.Account) ? "" : $"【{sub.Account}】";
-                        messages.Add($"{accountPart}「{sub.Name}」{daysText}（{nextDate:yyyy-MM-dd}）");
-                    }
+                    var daysText = GetDaysText(nextDate);
+                    var accountPart = string.IsNullOrWhiteSpace(sub.Account) ? "" : $"{sub.Account} - ";
+                    messages.Add($"{accountPart}{sub.Name} {daysText} ({nextDate:yyyy-MM-dd})");
                 }
             }
 
-            // Fire event for in-window notification display
             ExpiringNotificationsChanged?.Invoke(messages);
         }
 
         public void ShowTestNotification(Subscription sub)
         {
-             if (DateTime.TryParse(sub.NextDate, out DateTime nextDate))
-             {
-                 ShowNotification(sub, nextDate);
+            if (!DateTime.TryParse(sub.NextDate, out var nextDate))
+            {
+                return;
+            }
 
-                 // Also trigger in-window test notification
-                 var daysLeft = (nextDate.Date - DateTime.Now.Date).Days;
-                 var daysText = daysLeft == 0 ? "今天到期" :
-                                daysLeft == 1 ? "明天到期" :
-                                $"{daysLeft} 天後到期";
-                 var messages = new List<string> { $"「{sub.Name}」{daysText}（{nextDate:yyyy-MM-dd}）" };
-                 ExpiringNotificationsChanged?.Invoke(messages);
-             }
+            ShowNotification(sub, nextDate);
+            ExpiringNotificationsChanged?.Invoke(new List<string>
+            {
+                $"{sub.Name} {GetDaysText(nextDate)} ({nextDate:yyyy-MM-dd})"
+            });
         }
 
         private void ShowNotification(Subscription sub, DateTime date)
         {
-            var daysLeft = (date.Date - DateTime.Now.Date).Days;
-            var msg = daysLeft == 0 ? "今天到期！" : $"還有 {daysLeft} 天到期";
-            var title = $"訂閱即將到期: {sub.Name}";
-            var text = $"{sub.Name} 將於 {date:yyyy/MM/dd} 扣款 ({msg})";
+            var title = $"訂閱提醒: {sub.Name}";
+            var text = $"{sub.Name} 將於 {date:yyyy/MM/dd} 到期 ({GetDaysText(date)})";
 
             try
             {
-#if WINDOWS
-                new ToastContentBuilder()
-                    .AddText(title)
-                    .AddText(text)
-                    .Show();
-#else
+                if (TryEnsureWindowsNotificationsRegistered())
+                {
+                    var payload = $"""
+                        <toast>
+                          <visual>
+                            <binding template="ToastGeneric">
+                              <text>{SecurityElement.Escape(title)}</text>
+                              <text>{SecurityElement.Escape(text)}</text>
+                            </binding>
+                          </visual>
+                        </toast>
+                        """;
+
+                    var notification = Activator.CreateInstance(_appNotificationType!, payload);
+                    var showMethod = _notificationManager!.GetType()
+                        .GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                        .FirstOrDefault(method => method.Name == "Show" && method.GetParameters().Length == 1);
+
+                    showMethod?.Invoke(_notificationManager, new[] { notification });
+                    if (showMethod is not null)
+                    {
+                        return;
+                    }
+                }
+
                 Debug.WriteLine($"{title} - {text}");
-#endif
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Failed to show notification: {ex.Message}");
             }
+        }
+
+        private static string GetDaysText(DateTime date)
+        {
+            var daysLeft = (date.Date - DateTime.Now.Date).Days;
+            return daysLeft == 0 ? "今天到期" :
+                   daysLeft == 1 ? "明天到期" :
+                   $"{daysLeft} 天後到期";
+        }
+
+        private bool TryEnsureWindowsNotificationsRegistered()
+        {
+            if (_notificationsRegistered)
+            {
+                return true;
+            }
+
+            var managerType = Type.GetType("Microsoft.Windows.AppNotifications.AppNotificationManager, Microsoft.Windows.AppNotifications.Projection");
+            _appNotificationType = Type.GetType("Microsoft.Windows.AppNotifications.AppNotification, Microsoft.Windows.AppNotifications.Projection");
+            if (managerType is null || _appNotificationType is null)
+            {
+                return false;
+            }
+
+            var isSupportedMethod = managerType.GetMethod("IsSupported", BindingFlags.Public | BindingFlags.Static);
+            if (isSupportedMethod?.Invoke(null, null) is false)
+            {
+                return false;
+            }
+
+            _notificationManager = managerType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
+            if (_notificationManager is null)
+            {
+                return false;
+            }
+
+            _notificationManager.GetType().GetMethod("Register", Type.EmptyTypes)?.Invoke(_notificationManager, null);
+            _notificationsRegistered = true;
+            return true;
         }
     }
 }

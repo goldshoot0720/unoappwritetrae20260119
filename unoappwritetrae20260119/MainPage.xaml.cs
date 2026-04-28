@@ -39,7 +39,7 @@ public sealed partial class MainPage : Page
     private DispatcherQueueTimer? _sleepWarningTimer;
     private const double CompactLayoutBreakpoint = 1180;
     private const double NarrowLayoutBreakpoint = 860;
-    private bool _sortByName = true;
+    private bool _sortByName;
 
     public ObservableCollection<Subscription> Subscriptions { get; } = new();
     public ObservableCollection<OqdPricePoint> OqdHistory { get; } = new();
@@ -400,11 +400,18 @@ public sealed partial class MainPage : Page
             var dummySub = new Subscription
             {
                 Name = "測試通知",
-                NextDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd"),
+                NextDate = DateTime.Now.ToString("yyyy-MM-dd"),
                 Price = 100
             };
             _notificationService.ShowTestNotification(dummySub);
         }
+    }
+
+    private static DateTime GetSubscriptionDate(Subscription subscription)
+    {
+        return DateTime.TryParse(subscription.NextDate, out var date)
+            ? date.Date
+            : DateTime.MaxValue;
     }
 
     private async Task LoadSubscriptionsAsync()
@@ -423,15 +430,7 @@ public sealed partial class MainPage : Page
 
             var sortedItems = _sortByName
                 ? items.OrderBy(x => x.Name ?? string.Empty, StringComparer.CurrentCultureIgnoreCase)
-                : items.OrderBy(x =>
-                {
-                    if (DateTime.TryParse(x.NextDate, out var date))
-                    {
-                        return date;
-                    }
-
-                    return DateTime.MaxValue;
-                });
+                : items.OrderBy(GetSubscriptionDate);
 
             foreach (var item in sortedItems)
             {
