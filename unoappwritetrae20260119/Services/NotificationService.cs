@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Reflection;
-using System.Security;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using unoappwritetrae20260119.Models;
@@ -15,16 +13,12 @@ namespace unoappwritetrae20260119.Services
         private Timer? _timer;
         private AppwriteService? _appwriteService;
         private bool _schedulerStarted;
-        private bool _notificationsRegistered;
-        private object? _notificationManager;
-        private Type? _appNotificationType;
 
         public event Action<List<string>>? ExpiringNotificationsChanged;
 
         public void StartDailyScheduler(AppwriteService appwriteService)
         {
             _appwriteService = appwriteService;
-            TryEnsureWindowsNotificationsRegistered();
 
             if (_schedulerStarted)
             {
@@ -51,7 +45,6 @@ namespace unoappwritetrae20260119.Services
             Debug.WriteLine($"Next notification check scheduled at: {next6AM} (in {delay.TotalHours:F2} hours)");
 
             _timer?.Dispose();
-
             _timer = new Timer(async _ =>
             {
                 await CheckAndNotifyAsync();
@@ -120,32 +113,22 @@ namespace unoappwritetrae20260119.Services
 
             try
             {
-                if (TryEnsureWindowsNotificationsRegistered())
+                var helperPath = ResolveHelperPath();
+                if (!string.IsNullOrWhiteSpace(helperPath) && File.Exists(helperPath))
                 {
-                    var payload = $"""
-                        <toast>
-                          <visual>
-                            <binding template="ToastGeneric">
-                              <text>{SecurityElement.Escape(title)}</text>
-                              <text>{SecurityElement.Escape(text)}</text>
-                            </binding>
-                          </visual>
-                        </toast>
-                        """;
-
-                    var notification = Activator.CreateInstance(_appNotificationType!, payload);
-                    var showMethod = _notificationManager!.GetType()
-                        .GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                        .FirstOrDefault(method => method.Name == "Show" && method.GetParameters().Length == 1);
-
-                    showMethod?.Invoke(_notificationManager, new[] { notification });
-                    if (showMethod is not null)
+                    var startInfo = new ProcessStartInfo
                     {
-                        return;
-                    }
+                        FileName = helperPath,
+                        UseShellExecute = true,
+                        WindowStyle = ProcessWindowStyle.Hidden
+                    };
+                    startInfo.ArgumentList.Add(title);
+                    startInfo.ArgumentList.Add(text);
+                    Process.Start(startInfo);
+                    return;
                 }
 
-                Debug.WriteLine($"{title} - {text}");
+                Debug.WriteLine($"Notification helper not found. {title} - {text}");
             }
             catch (Exception ex)
             {
@@ -161,35 +144,23 @@ namespace unoappwritetrae20260119.Services
                    $"{daysLeft} 天後到期";
         }
 
-        private bool TryEnsureWindowsNotificationsRegistered()
+        private static string? ResolveHelperPath()
         {
-            if (_notificationsRegistered)
+            var processPath = Environment.ProcessPath;
+            if (string.IsNullOrWhiteSpace(processPath))
             {
-                return true;
+                return null;
             }
 
-            var managerType = Type.GetType("Microsoft.Windows.AppNotifications.AppNotificationManager, Microsoft.Windows.AppNotifications.Projection");
-            _appNotificationType = Type.GetType("Microsoft.Windows.AppNotifications.AppNotification, Microsoft.Windows.AppNotifications.Projection");
-            if (managerType is null || _appNotificationType is null)
-            {
-                return false;
-            }
-
-            var isSupportedMethod = managerType.GetMethod("IsSupported", BindingFlags.Public | BindingFlags.Static);
-            if (isSupportedMethod?.Invoke(null, null) is false)
-            {
-                return false;
-            }
-
-            _notificationManager = managerType.GetProperty("Default", BindingFlags.Public | BindingFlags.Static)?.GetValue(null);
-            if (_notificationManager is null)
-            {
-                return false;
-            }
-
-            _notificationManager.GetType().GetMethod("Register", Type.EmptyTypes)?.Invoke(_notificationManager, null);
-            _notificationsRegistered = true;
-            return true;
+            var appDirectory = Path.GetDirectoryName(processPath);
+            var workspaceRoot = Path.GetFullPath(Path.Combine(appDirectory!, "..", "..", ".."));
+            return Path.Combine(
+                workspaceRoot,
+                "UnoAppwriteNotificationHelper",
+                "bin",
+                "Debug",
+                "net9.0-windows10.0.19041.0",
+                "UnoAppwriteNotificationHelper.exe");
         }
     }
 }

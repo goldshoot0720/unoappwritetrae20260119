@@ -9,4 +9,5 @@
   <Project Path="unoappwritetrae20260119/unoappwritetrae20260119.csproj">
     <Deploy />
   </Project>
+  <Project Path="UnoAppwriteNotificationHelper/UnoAppwriteNotificationHelper.csproj" />
 </Solution>
